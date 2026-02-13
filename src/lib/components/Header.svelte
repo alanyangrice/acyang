@@ -19,10 +19,6 @@
 
 <style>
 	header {
-		position: sticky;
-		top: 0;
-		z-index: 100;
-		background-color: var(--bg);
 		border-bottom: 1px solid var(--border);
 	}
 
