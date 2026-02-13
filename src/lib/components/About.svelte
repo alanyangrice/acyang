@@ -1,12 +1,19 @@
 <section id="about">
 	<h2>About</h2>
-	<h1>Hey, I'm Your Name</h1>
+
+	<div class="intro-header">
+		<h1>Hey, I'm Your Name</h1>
+		<div class="intro-photo">
+			<img src="/headshot.svg" alt="Headshot of Your Name" />
+		</div>
+	</div>
+
 	<hr />
 
 	<p>
 		I am a software engineer passionate about building products that matter. Currently, I am
-		working on <a href="https://example.com">exciting projects</a> at the intersection of technology
-		and design.
+		working on <a href="https://example.com">exciting projects</a> at the intersection of
+		technology and design.
 	</p>
 
 	<p>
@@ -29,7 +36,41 @@
 		padding-top: 4rem;
 	}
 
-	h1 {
-		margin-top: 0.5rem;
+	.intro-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 2rem;
+	}
+
+	.intro-header h1 {
+		margin: 0;
+	}
+
+	.intro-photo {
+		flex-shrink: 0;
+	}
+
+	.intro-photo img {
+		width: 120px;
+		height: 120px;
+		border-radius: 50%;
+		object-fit: cover;
+		display: block;
+	}
+
+	/* Stack on small screens */
+	@media (max-width: 560px) {
+		.intro-header {
+			flex-direction: column-reverse;
+			align-items: center;
+			text-align: center;
+			gap: 1.25rem;
+		}
+
+		.intro-photo img {
+			width: 110px;
+			height: 110px;
+		}
 	}
 </style>
