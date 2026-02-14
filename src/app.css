@@ -86,8 +86,8 @@ a:hover {
 /* ===== Content panel over Game of Life background ===== */
 main.container {
 	background: rgba(250, 250, 250, 0.55);
-	backdrop-filter: blur(6px);
-	-webkit-backdrop-filter: blur(6px);
+	backdrop-filter: blur(1px);
+	-webkit-backdrop-filter: blur(1px);
 	border-radius: 6px;
 	padding-top: 0.5rem;
 	padding-bottom: 2rem;

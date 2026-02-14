@@ -10,8 +10,8 @@
 		padding: 2rem 0;
 		border-top: 1px solid var(--border);
 		background: rgba(250, 250, 250, 0.55);
-		backdrop-filter: blur(6px);
-		-webkit-backdrop-filter: blur(6px);
+		backdrop-filter: blur(1px);
+		-webkit-backdrop-filter: blur(1px);
 	}
 
 	.footer-inner {
