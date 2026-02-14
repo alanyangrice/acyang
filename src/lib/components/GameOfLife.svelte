@@ -1,18 +1,19 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 
-	const CELL_SIZE = 14;
+	const CELL_SIZE = 10;
 	const ALIVE_PROBABILITY = 0.15;
-	const TICK_MS = 120;
+	const TICK_MS = 100;
 	const BRUSH_RADIUS = 1;
 
-	// Shades of blue (0 = dead, 1–4 = alive with different opacity/tones)
+	// Shades of blue (0 = dead, 1–4 = alive with different tones)
 	const BLUE_SHADES = [
 		'rgba(74, 111, 165, 0.22)',
 		'rgba(74, 111, 165, 0.16)',
 		'rgba(59, 130, 246, 0.18)',
 		'rgba(96, 165, 250, 0.14)'
 	];
+	const NUM_SHADES = BLUE_SHADES.length;
 
 	let canvas: HTMLCanvasElement;
 	let ctx: CanvasRenderingContext2D | null = null;
@@ -22,79 +23,45 @@
 	let nextGrid: Uint8Array;
 	let tickInterval: ReturnType<typeof setInterval>;
 	let rafId: number;
-	let isVisible = true;
+	let renderQueued = false;
+	let forceFullRedraw = true;
+
+	// Precomputed wrap lookup tables
+	let wrapXL: Uint16Array;
+	let wrapXR: Uint16Array;
+	let wrapYA: Uint32Array; // row offset for y-1
+	let wrapYB: Uint32Array; // row offset for y+1
 
 	function randomShade(): number {
-		return 1 + Math.floor(Math.random() * BLUE_SHADES.length);
+		return 1 + ((Math.random() * NUM_SHADES) | 0);
 	}
 
-	function initGrid() {
-		cols = Math.ceil(window.innerWidth / CELL_SIZE);
-		rows = Math.ceil(window.innerHeight / CELL_SIZE);
-		grid = new Uint8Array(cols * rows);
-		nextGrid = new Uint8Array(cols * rows);
-
-		// Random initial state; alive cells get a random shade (1–4)
-		for (let i = 0; i < grid.length; i++) {
-			grid[i] = Math.random() < ALIVE_PROBABILITY ? randomShade() : 0;
+	function rebuildLookup() {
+		wrapXL = new Uint16Array(cols);
+		wrapXR = new Uint16Array(cols);
+		for (let x = 0; x < cols; x++) {
+			wrapXL[x] = x === 0 ? cols - 1 : x - 1;
+			wrapXR[x] = x === cols - 1 ? 0 : x + 1;
 		}
-	}
 
-	function idx(x: number, y: number): number {
-		return y * cols + x;
-	}
-
-	function countNeighbors(x: number, y: number): number {
-		let count = 0;
-		for (let dy = -1; dy <= 1; dy++) {
-			for (let dx = -1; dx <= 1; dx++) {
-				if (dx === 0 && dy === 0) continue;
-				const nx = (x + dx + cols) % cols;
-				const ny = (y + dy + rows) % rows;
-				count += grid[idx(nx, ny)] > 0 ? 1 : 0;
-			}
-		}
-		return count;
-	}
-
-	function tick() {
+		wrapYA = new Uint32Array(rows);
+		wrapYB = new Uint32Array(rows);
 		for (let y = 0; y < rows; y++) {
-			for (let x = 0; x < cols; x++) {
-				const neighbors = countNeighbors(x, y);
-				const i = idx(x, y);
-				const alive = grid[i] > 0;
-				if (alive) {
-					nextGrid[i] = neighbors === 2 || neighbors === 3 ? grid[i] : 0;
-				} else {
-					nextGrid[i] = neighbors === 3 ? randomShade() : 0;
-				}
-			}
+			wrapYA[y] = (y === 0 ? rows - 1 : y - 1) * cols;
+			wrapYB[y] = (y === rows - 1 ? 0 : y + 1) * cols;
 		}
-		// Swap buffers
-		const tmp = grid;
-		grid = nextGrid;
-		nextGrid = tmp;
 	}
 
-	function draw() {
-		if (!ctx) return;
-
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-		for (let y = 0; y < rows; y++) {
-			for (let x = 0; x < cols; x++) {
-				const v = grid[idx(x, y)];
-				if (v > 0) {
-					ctx.fillStyle = BLUE_SHADES[v - 1];
-					ctx.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE - 1, CELL_SIZE - 1);
-				}
-			}
-		}
-
-		rafId = requestAnimationFrame(draw);
+	function invalidate() {
+		if (renderQueued) return;
+		renderQueued = true;
+		rafId = requestAnimationFrame(() => {
+			renderQueued = false;
+			draw();
+		});
 	}
 
-	function resizeCanvas() {
+	function initAndResize() {
 		if (!canvas) return;
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
@@ -105,76 +72,193 @@
 
 		cols = Math.ceil(canvas.width / CELL_SIZE);
 		rows = Math.ceil(canvas.height / CELL_SIZE);
-		grid = new Uint8Array(cols * rows);
-		nextGrid = new Uint8Array(cols * rows);
+		const len = cols * rows;
+		grid = new Uint8Array(len);
+		nextGrid = new Uint8Array(len);
 
-		// Copy old state into resized grid
-		if (oldGrid) {
+		rebuildLookup();
+
+		if (oldGrid && oldCols > 0) {
+			// Copy existing state
 			const minCols = Math.min(oldCols, cols);
 			const minRows = Math.min(oldRows, rows);
 			for (let y = 0; y < minRows; y++) {
+				const srcOff = y * oldCols;
+				const dstOff = y * cols;
 				for (let x = 0; x < minCols; x++) {
-					grid[idx(x, y)] = oldGrid[y * oldCols + x];
+					grid[dstOff + x] = oldGrid[srcOff + x];
 				}
 			}
 			// Fill new cells randomly
 			for (let y = 0; y < rows; y++) {
+				const off = y * cols;
 				for (let x = 0; x < cols; x++) {
 					if (x >= oldCols || y >= oldRows) {
-						grid[idx(x, y)] = Math.random() < ALIVE_PROBABILITY ? randomShade() : 0;
+						grid[off + x] = Math.random() < ALIVE_PROBABILITY ? randomShade() : 0;
 					}
 				}
+			}
+		} else {
+			// First init: random seed
+			for (let i = 0; i < len; i++) {
+				grid[i] = Math.random() < ALIVE_PROBABILITY ? randomShade() : 0;
+			}
+		}
+
+		// Copy grid into nextGrid so first diff-draw doesn't see stale data
+		nextGrid.set(grid);
+		forceFullRedraw = true;
+		invalidate();
+	}
+
+	function tick() {
+		const c = cols;
+		const r = rows;
+		const g = grid;
+		const ng = nextGrid;
+		const xl = wrapXL;
+		const xr = wrapXR;
+		const ya = wrapYA;
+		const yb = wrapYB;
+
+		for (let y = 0; y < r; y++) {
+			const yOff = y * c;
+			const above = ya[y];
+			const below = yb[y];
+
+			for (let x = 0; x < c; x++) {
+				const left = xl[x];
+				const right = xr[x];
+
+				const neighbors =
+					(g[above + left] > 0 ? 1 : 0) +
+					(g[above + x] > 0 ? 1 : 0) +
+					(g[above + right] > 0 ? 1 : 0) +
+					(g[yOff + left] > 0 ? 1 : 0) +
+					(g[yOff + right] > 0 ? 1 : 0) +
+					(g[below + left] > 0 ? 1 : 0) +
+					(g[below + x] > 0 ? 1 : 0) +
+					(g[below + right] > 0 ? 1 : 0);
+
+				const i = yOff + x;
+				const cur = g[i];
+
+				if (cur > 0) {
+					ng[i] = (neighbors === 2 || neighbors === 3) ? cur : 0;
+				} else {
+					ng[i] = neighbors === 3 ? randomShade() : 0;
+				}
+			}
+		}
+
+		// Swap buffers (nextGrid now holds previous generation for diffing)
+		const tmp = grid;
+		grid = nextGrid;
+		nextGrid = tmp;
+		invalidate();
+	}
+
+	function draw() {
+		if (!ctx) return;
+
+		const g = grid;
+		const prev = nextGrid; // previous generation after swap
+		const c = cols;
+		const r = rows;
+		const sz = CELL_SIZE;
+		const gap = sz - 1;
+
+		if (forceFullRedraw) {
+			forceFullRedraw = false;
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+			for (let s = 0; s < NUM_SHADES; s++) {
+				const shade = s + 1;
+				ctx.fillStyle = BLUE_SHADES[s];
+				ctx.beginPath();
+				for (let y = 0; y < r; y++) {
+					const yOff = y * c;
+					const py = y * sz;
+					for (let x = 0; x < c; x++) {
+						if (g[yOff + x] === shade) {
+							ctx.rect(x * sz, py, gap, gap);
+						}
+					}
+				}
+				ctx.fill();
+			}
+			return;
+		}
+
+		// Diff-based draw: only update changed cells
+		const paths = [new Path2D(), new Path2D(), new Path2D(), new Path2D()];
+		let hasChanges = false;
+
+		const len = g.length;
+		for (let i = 0; i < len; i++) {
+			const now = g[i];
+			const old = prev[i];
+			if (now === old) continue;
+
+			hasChanges = true;
+			const x = (i % c) * sz;
+			const y = ((i / c) | 0) * sz;
+
+			// Clear the old cell
+			ctx.clearRect(x, y, gap, gap);
+
+			// If now alive, add to the shade's path
+			if (now > 0) paths[now - 1].rect(x, y, gap, gap);
+		}
+
+		if (hasChanges) {
+			for (let s = 0; s < NUM_SHADES; s++) {
+				ctx.fillStyle = BLUE_SHADES[s];
+				ctx.fill(paths[s]);
 			}
 		}
 	}
 
 	let lastMouseMove = 0;
-	function handleMouseMove(e: MouseEvent) {
+	function handlePointerMove(e: PointerEvent) {
 		const now = performance.now();
-		if (now - lastMouseMove < 50) return; // Throttle to ~20fps
+		if (now - lastMouseMove < 50) return;
 		lastMouseMove = now;
 
-		const cx = Math.floor(e.clientX / CELL_SIZE);
-		const cy = Math.floor(e.clientY / CELL_SIZE);
+		const cx = (e.clientX / CELL_SIZE) | 0;
+		const cy = (e.clientY / CELL_SIZE) | 0;
 
 		for (let dy = -BRUSH_RADIUS; dy <= BRUSH_RADIUS; dy++) {
+			const ny = cy + dy;
+			if (ny < 0 || ny >= rows) continue;
+			const off = ny * cols;
 			for (let dx = -BRUSH_RADIUS; dx <= BRUSH_RADIUS; dx++) {
 				const nx = cx + dx;
-				const ny = cy + dy;
-				if (nx >= 0 && nx < cols && ny >= 0 && ny < rows) {
-					grid[idx(nx, ny)] = randomShade();
+				if (nx >= 0 && nx < cols) {
+					grid[off + nx] = randomShade();
 				}
 			}
 		}
-	}
-
-	function handleTouchMove(e: TouchEvent) {
-		const touch = e.touches[0];
-		if (!touch) return;
-		handleMouseMove({ clientX: touch.clientX, clientY: touch.clientY } as MouseEvent);
+		invalidate();
 	}
 
 	function handleVisibilityChange() {
-		isVisible = !document.hidden;
-		if (isVisible) {
+		if (document.hidden) {
 			clearInterval(tickInterval);
-			tickInterval = setInterval(tick, TICK_MS);
 		} else {
 			clearInterval(tickInterval);
+			tickInterval = setInterval(tick, TICK_MS);
 		}
 	}
 
 	onMount(() => {
-		ctx = canvas.getContext('2d');
-		initGrid();
-		resizeCanvas();
+		ctx = canvas.getContext('2d', { desynchronized: true });
+		initAndResize();
 
 		tickInterval = setInterval(tick, TICK_MS);
-		rafId = requestAnimationFrame(draw);
 
-		window.addEventListener('resize', resizeCanvas);
-		window.addEventListener('mousemove', handleMouseMove);
-		window.addEventListener('touchmove', handleTouchMove, { passive: true });
+		window.addEventListener('resize', initAndResize);
+		window.addEventListener('pointermove', handlePointerMove);
 		document.addEventListener('visibilitychange', handleVisibilityChange);
 	});
 
@@ -182,9 +266,8 @@
 		if (typeof window === 'undefined') return;
 		clearInterval(tickInterval);
 		cancelAnimationFrame(rafId);
-		window.removeEventListener('resize', resizeCanvas);
-		window.removeEventListener('mousemove', handleMouseMove);
-		window.removeEventListener('touchmove', handleTouchMove);
+		window.removeEventListener('resize', initAndResize);
+		window.removeEventListener('pointermove', handlePointerMove);
 		document.removeEventListener('visibilitychange', handleVisibilityChange);
 	});
 </script>
