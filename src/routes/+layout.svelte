@@ -2,7 +2,7 @@
 	import '../app.css';
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
-	import GameOfLife from '$lib/components/GameOfLife.svelte';
+	import Boids from '$lib/components/Boids.svelte';
 	import favicon from '$lib/assets/ASCII_DNA_Helix.png';
 
 	let { children } = $props();
@@ -13,7 +13,7 @@
 	<title>Alan Yang</title>
 </svelte:head>
 
-<GameOfLife />
+<Boids />
 
 <div class="page-wrapper">
 	<div id="top"></div>
