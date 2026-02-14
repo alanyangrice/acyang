@@ -83,16 +83,25 @@ a:hover {
 	padding-right: 1.5rem;
 }
 
-/* ===== Content panel over Game of Life background ===== */
+/* ===== Content panel over background simulation ===== */
 main.container {
 	background: rgba(250, 250, 250, 0.55);
-	backdrop-filter: blur(1px);
-	-webkit-backdrop-filter: blur(1px);
+	backdrop-filter: blur(2px);
+	-webkit-backdrop-filter: blur(2px);
 	border-radius: 6px;
 	padding-top: 0.5rem;
 	padding-bottom: 2rem;
 	margin-top: 0.5rem;
 	margin-bottom: 1rem;
+	/* Feathered mask on all four edges via composited gradients */
+	-webkit-mask-image:
+		linear-gradient(to bottom, transparent, black 3%, black 97%, transparent),
+		linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+	-webkit-mask-composite: destination-in;
+	mask-image:
+		linear-gradient(to bottom, transparent, black 3%, black 97%, transparent),
+		linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+	mask-composite: intersect;
 }
 
 /* ===== Section spacing ===== */
