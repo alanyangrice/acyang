@@ -2,9 +2,9 @@
 	const projects = [
 		{
 			name: 'Poker MCP',
-			description: 'MCP server for poker action recommendations. Uses real equity calculations, player tracking, and exploit-based recommendations.',
+			description: 'MCP server for poker action recommendations. Uses game theory optimal (GTO) equity calculations, player tracking, and exploit-based recommendations.',
 			url: 'https://github.com/alanyangrice/mcp-poker',
-			tags: ['TypeScript', 'Python', 'MCP', 'SQLite']
+			tags: ['MCP', 'TypeScript', 'Python', 'SQLite']
 		},
 		{
 			name: 'Checkers Reinforcement Learning',
@@ -13,10 +13,10 @@
 			tags: ['PyTorch', 'Gymnasium', 'Multiprocessing', 'Python']
 		},
 		{
-			name: 'Deadass',
-			description: 'Open-source library for fast image processing on the web.',
+			name: '[In Progress] Realtime Crypto Market Websocket',
+			description: 'A low-latency Rust service that injests real-time crypto market data from Kraken and Coinbase WebSocket feed and normalizes it into a consistent internal schema.',
 			url: 'https://example.com',
-			tags: ['Rust', 'WASM']
+			tags: ['Rust', 'Tokio', 'Postgres', 'Redis']
 		}
 	];
 </script>

@@ -23,11 +23,11 @@
 	<p>
 		I am currently interested in researching browser agents and reinforcement learning environments. Previously, I worked at 
 		<a href="https://www.bcm.edu/research/faculty-labs/robert-waterland-lab">Waterland Lab</a> where I researched the long-term stability of human 
-		<a href="https://google.com/search?q=Correlated+Regions+of+Systemic+Interindividual+Variation">CorSIVs</a>.
+		<a href="https://google.com/search?q=Correlated+Regions+of+Systemic+Interindividual+Variation">CoRSIVs</a>.
 	</p>
 
 	<p>
-		Outside of work, I enjoy reading novels and ...
+		Outside of work, I enjoy reading novels, watching anime, and playing board games like Dune and Catan.
 	</p>
 </section>
 
