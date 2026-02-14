@@ -165,14 +165,13 @@
 	});
 
 	onDestroy(() => {
+		if (typeof window === 'undefined') return;
 		clearInterval(tickInterval);
 		cancelAnimationFrame(rafId);
-		if (typeof window !== 'undefined') {
-			window.removeEventListener('resize', resizeCanvas);
-			window.removeEventListener('mousemove', handleMouseMove);
-			window.removeEventListener('touchmove', handleTouchMove);
-			document.removeEventListener('visibilitychange', handleVisibilityChange);
-		}
+		window.removeEventListener('resize', resizeCanvas);
+		window.removeEventListener('mousemove', handleMouseMove);
+		window.removeEventListener('touchmove', handleTouchMove);
+		document.removeEventListener('visibilitychange', handleVisibilityChange);
 	});
 </script>
 

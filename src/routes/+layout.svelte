@@ -3,14 +3,14 @@
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import GameOfLife from '$lib/components/GameOfLife.svelte';
-	import favicon from '$lib/assets/favicon.svg';
+	import favicon from '$lib/assets/ASCII_DNA_Helix.png';
 
 	let { children } = $props();
 </script>
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
-	<title>Your Name</title>
+	<title>Alan Yang</title>
 </svelte:head>
 
 <GameOfLife />

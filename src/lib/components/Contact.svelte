@@ -3,13 +3,13 @@
 
 	<p>
 		If you're building something interesting or just want to chat,
-		<a href="mailto:hello@example.com">reach out</a>.
+		<a href="mailto:alan.c.yang@rice.edu">reach out</a>.
 	</p>
 
 	<div class="links">
-		<a href="https://twitter.com" target="_blank" rel="noopener noreferrer">Twitter</a>
-		<a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</a>
-		<a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+		<a href="https://x.com/AlanYang6783" target="_blank" rel="noopener noreferrer">Twitter</a>
+		<a href="https://github.com/alanyangrice" target="_blank" rel="noopener noreferrer">GitHub</a>
+		<a href="https://linkedin.com/in/achenyang" target="_blank" rel="noopener noreferrer">LinkedIn</a>
 	</div>
 </section>
 

@@ -2,32 +2,32 @@
 	<h2>About</h2>
 
 	<div class="intro-header">
-		<h1>Hey, I'm Your Name</h1>
+		<h1>Hey, I'm Alan</h1>
 		<div class="intro-photo">
-			<img src="/headshot.svg" alt="Headshot of Your Name" />
+			<img src="/headshot.jpg" alt="Headshot of Alan" />
 		</div>
 	</div>
 
 	<hr />
 
 	<p>
-		I am a software engineer passionate about building products that matter. Currently, I am
-		working on <a href="https://example.com">exciting projects</a> at the intersection of
-		technology and design.
+		I am a junior at <a href="https://www.rice.edu">Rice University</a> studying Computer Science and Statistics.
+		Currently, I am working at <a href="https://recruitu.com">RecruitU</a> as a Software Engineer working on visualizing human experiences in graph networks.
 	</p>
 
 	<p>
-		Previously, I worked on full-stack applications at
-		<a href="https://example.com">Company A</a> and contributed to open-source tools at
-		<a href="https://example.com">Company B</a>. I studied Computer Science at
-		<a href="https://example.com">University</a>, where I focused on systems programming and
-		human-computer interaction.
+		Previously, I co-founded <a href="https://breakin.ai">BreakIn</a>, a platform that automates the outreach process for finance and investment banking recruiting.
+		We scaled to over five figures in monthly revenue and over 5,000 users.
 	</p>
 
 	<p>
-		Outside of work, I enjoy photography, reading, and exploring new places. The small details in
-		how things are built fascinate me, whether it's software architecture or a well-designed
-		building.
+		I am currently interested in researching browser agents and reinforcement learning environments. Previously, I worked at 
+		<a href="https://www.bcm.edu/research/faculty-labs/robert-waterland-lab">Waterland Lab</a> where I researched the long-term stability of human 
+		<a href="https://google.com/search?q=Correlated+Regions+of+Systemic+Interindividual+Variation">CorSIVs</a>.
+	</p>
+
+	<p>
+		Outside of work, I enjoy reading novels and ...
 	</p>
 </section>
 

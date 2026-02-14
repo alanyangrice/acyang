@@ -8,7 +8,7 @@
 
 <header>
 	<div class="container header-inner">
-		<a class="site-name" href="#top">Your Name</a>
+		<a class="site-name" href="#top">Alan Yang</a>
 		<nav>
 			{#each navItems as item}
 				<a href={item.href}>{item.label}</a>

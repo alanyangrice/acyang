@@ -1,19 +1,19 @@
 <script lang="ts">
 	const projects = [
 		{
-			name: 'Project Alpha',
-			description: 'A tool for automating workflow pipelines with a clean CLI interface.',
-			url: 'https://example.com',
-			tags: ['TypeScript', 'CLI']
+			name: 'Poker MCP',
+			description: 'MCP server for poker action recommendations. Uses real equity calculations, player tracking, and exploit-based recommendations.',
+			url: 'https://github.com/alanyangrice/mcp-poker',
+			tags: ['TypeScript', 'Python', 'MCP', 'SQLite']
 		},
 		{
-			name: 'Project Beta',
-			description: 'Real-time collaborative editor built for small teams.',
-			url: 'https://example.com',
-			tags: ['Svelte', 'WebSockets']
+			name: 'Checkers Reinforcement Learning',
+			description: 'A fully playable checkers game with a reinforcement learning agent trained via Proximal Policy Optimization (PPO) self-play.',
+			url: 'https://github.com/alanyangrice/checkersRL',
+			tags: ['PyTorch', 'Gymnasium', 'Multiprocessing', 'Python']
 		},
 		{
-			name: 'Project Gamma',
+			name: 'Deadass',
 			description: 'Open-source library for fast image processing on the web.',
 			url: 'https://example.com',
 			tags: ['Rust', 'WASM']
