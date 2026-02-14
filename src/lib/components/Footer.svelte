@@ -1,6 +1,6 @@
 <footer>
 	<div class="container footer-inner">
-		<span>&copy; {new Date().getFullYear()}</span>
+		<span>Alan Yang &copy; {new Date().getFullYear()}</span>
 	</div>
 </footer>
 

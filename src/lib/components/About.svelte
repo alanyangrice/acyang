@@ -12,7 +12,7 @@
 
 	<p>
 		I am a junior at <a href="https://www.rice.edu">Rice University</a> studying Computer Science and Statistics.
-		Currently, I am working at <a href="https://recruitu.com">RecruitU</a> as a Software Engineer working on visualizing human experiences in graph networks.
+		Currently, I am working at <a href="https://recruitu.com">RecruitU</a> as a Software Engineer working on visualizing human experiences using graph networks.
 	</p>
 
 	<p>
