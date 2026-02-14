@@ -2,10 +2,15 @@
 	import '../app.css';
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
-	import Boids from '$lib/components/Boids.svelte';
+	import FlowField from '$lib/components/simulations/FlowField.svelte';
+	import Boids from '$lib/components/simulations/Boids.svelte';
+	import GameOfLife from '$lib/components/simulations/GameOfLife.svelte';
 	import favicon from '$lib/assets/ASCII_DNA_Helix.png';
 
 	let { children } = $props();
+
+	const backgrounds = ['flowfield', 'boids', 'gameoflife'] as const;
+	const selected = backgrounds[(Math.random() * backgrounds.length) | 0];
 </script>
 
 <svelte:head>
@@ -13,7 +18,13 @@
 	<title>Alan Yang</title>
 </svelte:head>
 
-<Boids />
+{#if selected === 'flowfield'}
+	<FlowField />
+{:else if selected === 'boids'}
+	<Boids />
+{:else}
+	<GameOfLife />
+{/if}
 
 <div class="page-wrapper">
 	<div id="top"></div>
