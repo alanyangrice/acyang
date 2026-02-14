@@ -16,8 +16,8 @@
 	</p>
 
 	<p>
-		Previously, I co-founded <a href="https://breakin.ai">BreakIn</a>, a platform that automates the outreach process for finance and investment banking recruiting.
-		We scaled to over five figures in monthly revenue and over 5,000 users.
+		Previously, I co-founded <a href="https://breakin.ai">BreakIn</a>, a platform that automates the outreaching process for finance and investment banking recruiting.
+		We scaled to over six figures in annual revenue and 2,000 users.
 	</p>
 
 	<p>

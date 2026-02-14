@@ -6,6 +6,14 @@
 	const TICK_MS = 120;
 	const BRUSH_RADIUS = 1;
 
+	// Shades of blue (0 = dead, 1–4 = alive with different opacity/tones)
+	const BLUE_SHADES = [
+		'rgba(74, 111, 165, 0.22)',
+		'rgba(74, 111, 165, 0.16)',
+		'rgba(59, 130, 246, 0.18)',
+		'rgba(96, 165, 250, 0.14)'
+	];
+
 	let canvas: HTMLCanvasElement;
 	let ctx: CanvasRenderingContext2D | null = null;
 	let cols = 0;
@@ -16,15 +24,19 @@
 	let rafId: number;
 	let isVisible = true;
 
+	function randomShade(): number {
+		return 1 + Math.floor(Math.random() * BLUE_SHADES.length);
+	}
+
 	function initGrid() {
 		cols = Math.ceil(window.innerWidth / CELL_SIZE);
 		rows = Math.ceil(window.innerHeight / CELL_SIZE);
 		grid = new Uint8Array(cols * rows);
 		nextGrid = new Uint8Array(cols * rows);
 
-		// Random initial state
+		// Random initial state; alive cells get a random shade (1–4)
 		for (let i = 0; i < grid.length; i++) {
-			grid[i] = Math.random() < ALIVE_PROBABILITY ? 1 : 0;
+			grid[i] = Math.random() < ALIVE_PROBABILITY ? randomShade() : 0;
 		}
 	}
 
@@ -39,7 +51,7 @@
 				if (dx === 0 && dy === 0) continue;
 				const nx = (x + dx + cols) % cols;
 				const ny = (y + dy + rows) % rows;
-				count += grid[idx(nx, ny)];
+				count += grid[idx(nx, ny)] > 0 ? 1 : 0;
 			}
 		}
 		return count;
@@ -50,10 +62,11 @@
 			for (let x = 0; x < cols; x++) {
 				const neighbors = countNeighbors(x, y);
 				const i = idx(x, y);
-				if (grid[i] === 1) {
-					nextGrid[i] = neighbors === 2 || neighbors === 3 ? 1 : 0;
+				const alive = grid[i] > 0;
+				if (alive) {
+					nextGrid[i] = neighbors === 2 || neighbors === 3 ? grid[i] : 0;
 				} else {
-					nextGrid[i] = neighbors === 3 ? 1 : 0;
+					nextGrid[i] = neighbors === 3 ? randomShade() : 0;
 				}
 			}
 		}
@@ -68,10 +81,11 @@
 
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		ctx.fillStyle = 'rgba(74, 111, 165, 0.18)';
 		for (let y = 0; y < rows; y++) {
 			for (let x = 0; x < cols; x++) {
-				if (grid[idx(x, y)] === 1) {
+				const v = grid[idx(x, y)];
+				if (v > 0) {
+					ctx.fillStyle = BLUE_SHADES[v - 1];
 					ctx.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE - 1, CELL_SIZE - 1);
 				}
 			}
@@ -107,7 +121,7 @@
 			for (let y = 0; y < rows; y++) {
 				for (let x = 0; x < cols; x++) {
 					if (x >= oldCols || y >= oldRows) {
-						grid[idx(x, y)] = Math.random() < ALIVE_PROBABILITY ? 1 : 0;
+						grid[idx(x, y)] = Math.random() < ALIVE_PROBABILITY ? randomShade() : 0;
 					}
 				}
 			}
@@ -128,7 +142,7 @@
 				const nx = cx + dx;
 				const ny = cy + dy;
 				if (nx >= 0 && nx < cols && ny >= 0 && ny < rows) {
-					grid[idx(nx, ny)] = 1;
+					grid[idx(nx, ny)] = randomShade();
 				}
 			}
 		}
