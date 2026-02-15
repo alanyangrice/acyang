@@ -15,7 +15,7 @@
 		{
 			name: '[In Progress] Realtime Crypto Market Websocket',
 			description: 'A low-latency Rust service that injests real-time crypto market data from Kraken and Coinbase WebSocket feed and normalizes it into a consistent internal schema.',
-			url: 'https://example.com',
+			url: 'https://github.com/alanyangrice/crypto-websocket',
 			tags: ['Rust', 'Tokio', 'Postgres', 'Redis']
 		}
 	];
