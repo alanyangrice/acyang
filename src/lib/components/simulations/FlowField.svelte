@@ -21,18 +21,20 @@
 	const FADE_AMOUNT = 0.06;  // alpha removed per pass (>0.04 beats 8-bit floor)
 	let frameCount = 0;
 
-	// Blue palette
+	// Blue palette (spread from dark navy to bright sky)
 	const COLOR_RGB: [number, number, number][] = [
-		[74, 111, 165],
-		[59, 130, 246],
-		[96, 165, 250],
-		[74, 111, 165]
+		[30, 64, 120],    // dark navy
+		[59, 130, 246],   // vivid blue
+		[96, 175, 255],   // bright sky
+		[120, 80, 200],   // blue-violet
+		[40, 160, 190]    // teal
 	];
 	const COLOR_BASE_ALPHA = [
 		PARTICLE_ALPHA,
+		PARTICLE_ALPHA * 0.9,
+		PARTICLE_ALPHA * 0.8,
 		PARTICLE_ALPHA * 0.85,
-		PARTICLE_ALPHA * 0.7,
-		PARTICLE_ALPHA * 0.6
+		PARTICLE_ALPHA * 0.75
 	];
 	const NUM_COLORS = COLOR_RGB.length;
 	const COLOR_STR = COLOR_RGB.map(([r, g, b]) => `rgb(${r},${g},${b})`);

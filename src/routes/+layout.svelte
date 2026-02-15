@@ -9,8 +9,8 @@
 
 	let { children } = $props();
 
-	const backgrounds = ['flowfield', 'boids', 'gameoflife'] as const;
-	const selected = backgrounds[(Math.random() * backgrounds.length) | 0];
+	// const backgrounds = ['flowfield', 'boids', 'gameoflife'] as const;
+	// const selected = backgrounds[(Math.random() * backgrounds.length) | 0];
 </script>
 
 <svelte:head>
@@ -18,13 +18,7 @@
 	<title>Alan Yang</title>
 </svelte:head>
 
-{#if selected === 'flowfield'}
-	<FlowField />
-{:else if selected === 'boids'}
-	<Boids />
-{:else}
-	<GameOfLife />
-{/if}
+<FlowField />
 
 <div class="page-wrapper">
 	<div id="top"></div>
