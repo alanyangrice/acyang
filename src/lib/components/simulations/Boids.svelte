@@ -19,8 +19,8 @@
 	const BOID_SIZE = 3;
 
 	// --- Predator tuning ---
-	const PREDATOR_SPEED = 2.0;
-	const PREDATOR_ACCEL = 0.04;
+	const PREDATOR_SPEED = 2.8;
+	const PREDATOR_ACCEL = 0.08;
 	const PREDATOR_SCARE_RADIUS = 120;  // boids flee within this range
 	const FLEE_FORCE = 0.35;
 	const PREDATOR_SIZE = 6;
