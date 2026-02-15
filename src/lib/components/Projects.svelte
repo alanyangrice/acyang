@@ -8,7 +8,7 @@
 		},
 		{
 			name: 'Checkers Reinforcement Learning',
-			description: 'Fully playable checkers game with a reinforcement learning agent trained via Proximal Policy Optimization (PPO) self-play with opponent pools and alpha-zero training loop.',
+			description: 'Fully playable checkers game with a reinforcement learning agent trained via Proximal Policy Optimization (PPO) self-play, curriculum learning, opponent pools, and alpha-zero training loop.',
 			url: 'https://github.com/alanyangrice/checkersRL',
 			tags: ['PyTorch', 'Gymnasium', 'Multiprocessing', 'Python']
 		},
