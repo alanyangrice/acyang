@@ -15,40 +15,48 @@
 	const EDGE_TURN = 0.15;
 	const CURSOR_SCARE_RADIUS = 130;
 	const CURSOR_FLEE_FORCE = 0.3;
-	const TRAIL_ALPHA = 0.12;
 	const BOID_SIZE = 3;
 
+	// --- Trail decay ---
+	const TRAIL_FADE = 0.03;
+
 	// --- Predator tuning ---
-	const PREDATOR_SPEED = 2.8;
+	const PREDATOR_SPEED = 2.0;
 	const PREDATOR_ACCEL = 0.08;
-	const PREDATOR_SCARE_RADIUS = 120;  // boids flee within this range
+	const PREDATOR_SCARE_RADIUS = 120;
 	const FLEE_FORCE = 0.35;
 	const PREDATOR_SIZE = 6;
-	const PREDATOR_COLOR = 'rgba(180, 60, 60, 0.7)';
 
 	// --- Scatter tuning ---
-	const SCATTER_COOLDOWN = 180;  // frames between scatters (~3 sec at 60fps)
+	const SCATTER_COOLDOWN = 180;
 	let scatterTimer = SCATTER_COOLDOWN;
 
-	// Subtle blue palette for boids
-	const COLORS = [
-		'rgba(74, 111, 165, 0.55)',
-		'rgba(59, 130, 246, 0.45)',
-		'rgba(96, 165, 250, 0.40)',
-		'rgba(74, 111, 165, 0.35)'
+	// Blue palette
+	const COLOR_RGB: [number, number, number][] = [
+		[74, 111, 165],
+		[59, 130, 246],
+		[96, 165, 250],
+		[74, 111, 165]
 	];
+	const COLOR_BASE_ALPHA = [0.55, 0.45, 0.40, 0.35];
+	const NUM_COLORS = COLOR_RGB.length;
+	const COLOR_STR = COLOR_RGB.map(([r, g, b]) => `rgb(${r},${g},${b})`);
 
 	interface Boid {
 		x: number;
 		y: number;
+		px: number;  // previous x
+		py: number;  // previous y
 		vx: number;
 		vy: number;
-		color: string;
+		colorIdx: number;
 	}
 
 	interface Predator {
 		x: number;
 		y: number;
+		px: number;
+		py: number;
 		vx: number;
 		vy: number;
 	}
@@ -63,47 +71,74 @@
 	let mouseX = -1000;
 	let mouseY = -1000;
 
+	// --- Spatial grid ---
+	const CELL_SIZE = VISUAL_RANGE;
+	const MAX_PER_CELL = 32;
+	let gridCols = 0;
+	let gridRows = 0;
+	let gridCells: Int16Array;
+	let gridCounts: Int16Array;
+
+	function rebuildGrid() {
+		gridCols = Math.ceil(width / CELL_SIZE) || 1;
+		gridRows = Math.ceil(height / CELL_SIZE) || 1;
+		gridCells = new Int16Array(gridCols * gridRows * MAX_PER_CELL);
+		gridCounts = new Int16Array(gridCols * gridRows);
+	}
+
+	function populateGrid() {
+		gridCounts.fill(0);
+		for (let i = 0; i < boids.length; i++) {
+			const b = boids[i];
+			const cx = Math.min((b.x / CELL_SIZE) | 0, gridCols - 1);
+			const cy = Math.min((b.y / CELL_SIZE) | 0, gridRows - 1);
+			const cellIdx = cy * gridCols + cx;
+			const count = gridCounts[cellIdx];
+			if (count < MAX_PER_CELL) {
+				gridCells[cellIdx * MAX_PER_CELL + count] = i;
+				gridCounts[cellIdx] = count + 1;
+			}
+		}
+	}
+
 	function initBoids() {
 		boids = [];
 		for (let i = 0; i < NUM_BOIDS; i++) {
 			const angle = Math.random() * Math.PI * 2;
 			const speed = MIN_SPEED + Math.random() * (MAX_SPEED - MIN_SPEED);
+			const x = Math.random() * width;
+			const y = Math.random() * height;
 			boids.push({
-				x: Math.random() * width,
-				y: Math.random() * height,
+				x, y, px: x, py: y,
 				vx: Math.cos(angle) * speed,
 				vy: Math.sin(angle) * speed,
-				color: COLORS[(Math.random() * COLORS.length) | 0]
+				colorIdx: (Math.random() * NUM_COLORS) | 0
 			});
 		}
 	}
 
 	function initPredator() {
 		const angle = Math.random() * Math.PI * 2;
+		const x = Math.random() * width;
+		const y = Math.random() * height;
 		predator = {
-			x: Math.random() * width,
-			y: Math.random() * height,
+			x, y, px: x, py: y,
 			vx: Math.cos(angle) * PREDATOR_SPEED * 0.5,
 			vy: Math.sin(angle) * PREDATOR_SPEED * 0.5
 		};
 	}
 
 	function findFlockCenter(): { x: number; y: number } {
-		// Find the densest cluster by picking the boid with the most neighbors
-		let bestX = width / 2;
-		let bestY = height / 2;
-		let bestCount = 0;
+		let bestX = width / 2, bestY = height / 2, bestCount = 0;
 		const n = boids.length;
-		// Sample every 5th boid to save CPU
-		for (let i = 0; i < n; i += 5) {
+		const vr2 = VISUAL_RANGE * VISUAL_RANGE;
+		for (let i = 0; i < n; i += 8) {
 			const b = boids[i];
 			let count = 0;
 			for (let j = 0; j < n; j++) {
 				const dx = boids[j].x - b.x;
 				const dy = boids[j].y - b.y;
-				if (dx * dx + dy * dy < VISUAL_RANGE * VISUAL_RANGE) {
-					count++;
-				}
+				if (dx * dx + dy * dy < vr2) count++;
 			}
 			if (count > bestCount) {
 				bestCount = count;
@@ -116,9 +151,10 @@
 
 	function updatePredator() {
 		const p = predator;
-		const target = findFlockCenter();
+		p.px = p.x;
+		p.py = p.y;
 
-		// Steer toward densest flock cluster
+		const target = findFlockCenter();
 		const dx = target.x - p.x;
 		const dy = target.y - p.y;
 		const dist = Math.sqrt(dx * dx + dy * dy);
@@ -126,35 +162,33 @@
 			p.vx += (dx / dist) * PREDATOR_ACCEL;
 			p.vy += (dy / dist) * PREDATOR_ACCEL;
 		}
-
-		// Edge avoidance
 		if (p.x < EDGE_MARGIN) p.vx += EDGE_TURN;
 		if (p.x > width - EDGE_MARGIN) p.vx -= EDGE_TURN;
 		if (p.y < EDGE_MARGIN) p.vy += EDGE_TURN;
 		if (p.y > height - EDGE_MARGIN) p.vy -= EDGE_TURN;
 
-		// Clamp speed
 		const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
 		if (speed > PREDATOR_SPEED) {
 			p.vx = (p.vx / speed) * PREDATOR_SPEED;
 			p.vy = (p.vy / speed) * PREDATOR_SPEED;
 		}
-
 		p.x += p.vx;
 		p.y += p.vy;
 	}
 
 	function update() {
 		const n = boids.length;
-		const px = predator.x;
-		const py = predator.y;
+		const predX = predator.x;
+		const predY = predator.y;
 		const scareR2 = PREDATOR_SCARE_RADIUS * PREDATOR_SCARE_RADIUS;
+		const cursorR2 = CURSOR_SCARE_RADIUS * CURSOR_SCARE_RADIUS;
+		const vr2 = VISUAL_RANGE * VISUAL_RANGE;
+		const sepD2 = SEPARATION_DIST * SEPARATION_DIST;
 
-		// Occasional scatter: predator bursts toward the flock
+		// Occasional scatter burst
 		scatterTimer--;
 		if (scatterTimer <= 0) {
 			scatterTimer = SCATTER_COOLDOWN + ((Math.random() * 120) | 0);
-			// Give predator a speed burst toward the flock
 			const target = findFlockCenter();
 			const dx = target.x - predator.x;
 			const dy = target.y - predator.y;
@@ -166,91 +200,98 @@
 		}
 
 		updatePredator();
+		populateGrid();
 
 		for (let i = 0; i < n; i++) {
 			const b = boids[i];
+
+			// Store previous position (for trail drawing)
+			b.px = b.x;
+			b.py = b.y;
 
 			let sepX = 0, sepY = 0;
 			let alignVx = 0, alignVy = 0, alignCount = 0;
 			let cohX = 0, cohY = 0, cohCount = 0;
 
-			for (let j = 0; j < n; j++) {
-				if (i === j) continue;
-				const other = boids[j];
-				const dx = other.x - b.x;
-				const dy = other.y - b.y;
-				const dist = Math.sqrt(dx * dx + dy * dy);
+			// Spatial grid neighbor lookup
+			const cx = Math.min((b.x / CELL_SIZE) | 0, gridCols - 1);
+			const cy = Math.min((b.y / CELL_SIZE) | 0, gridRows - 1);
+			const cxMin = cx > 0 ? cx - 1 : 0;
+			const cxMax = cx < gridCols - 1 ? cx + 1 : gridCols - 1;
+			const cyMin = cy > 0 ? cy - 1 : 0;
+			const cyMax = cy < gridRows - 1 ? cy + 1 : gridRows - 1;
 
-				if (dist < SEPARATION_DIST && dist > 0) {
-					sepX -= dx / dist;
-					sepY -= dy / dist;
-				}
+			for (let gy = cyMin; gy <= cyMax; gy++) {
+				for (let gx = cxMin; gx <= cxMax; gx++) {
+					const cellIdx = gy * gridCols + gx;
+					const count = gridCounts[cellIdx];
+					const base = cellIdx * MAX_PER_CELL;
+					for (let k = 0; k < count; k++) {
+						const j = gridCells[base + k];
+						if (j === i) continue;
+						const other = boids[j];
+						const dx = other.x - b.x;
+						const dy = other.y - b.y;
+						const d2 = dx * dx + dy * dy;
 
-				if (dist < VISUAL_RANGE) {
-					alignVx += other.vx;
-					alignVy += other.vy;
-					alignCount++;
-					cohX += other.x;
-					cohY += other.y;
-					cohCount++;
+						if (d2 < sepD2 && d2 > 0) {
+							const dist = Math.sqrt(d2);
+							sepX -= dx / dist;
+							sepY -= dy / dist;
+						}
+						if (d2 < vr2) {
+							alignVx += other.vx;
+							alignVy += other.vy;
+							alignCount++;
+							cohX += other.x;
+							cohY += other.y;
+							cohCount++;
+						}
+					}
 				}
 			}
 
-			// Apply separation
 			b.vx += sepX * SEPARATION_FORCE;
 			b.vy += sepY * SEPARATION_FORCE;
-
-			// Apply alignment
 			if (alignCount > 0) {
-				alignVx /= alignCount;
-				alignVy /= alignCount;
-				b.vx += (alignVx - b.vx) * ALIGNMENT_FORCE;
-				b.vy += (alignVy - b.vy) * ALIGNMENT_FORCE;
+				b.vx += (alignVx / alignCount - b.vx) * ALIGNMENT_FORCE;
+				b.vy += (alignVy / alignCount - b.vy) * ALIGNMENT_FORCE;
 			}
-
-			// Apply cohesion
 			if (cohCount > 0) {
-				cohX /= cohCount;
-				cohY /= cohCount;
-				b.vx += (cohX - b.x) * COHESION_FORCE;
-				b.vy += (cohY - b.y) * COHESION_FORCE;
+				b.vx += (cohX / cohCount - b.x) * COHESION_FORCE;
+				b.vy += (cohY / cohCount - b.y) * COHESION_FORCE;
 			}
 
 			// Flee from predator
-			const fdx = b.x - px;
-			const fdy = b.y - py;
-			const fdist2 = fdx * fdx + fdy * fdy;
 			let currentMaxSpeed = MAX_SPEED;
-
-			if (fdist2 < scareR2 && fdist2 > 0) {
-				const fdist = Math.sqrt(fdist2);
-				const strength = FLEE_FORCE * (1 - fdist / PREDATOR_SCARE_RADIUS);
-				b.vx += (fdx / fdist) * strength;
-				b.vy += (fdy / fdist) * strength;
+			const fdx = b.x - predX;
+			const fdy = b.y - predY;
+			const fd2 = fdx * fdx + fdy * fdy;
+			if (fd2 < scareR2 && fd2 > 0) {
+				const fdist = Math.sqrt(fd2);
+				const s = FLEE_FORCE * (1 - fdist / PREDATOR_SCARE_RADIUS);
+				b.vx += (fdx / fdist) * s;
+				b.vy += (fdy / fdist) * s;
 				currentMaxSpeed = FLEE_SPEED;
 			}
 
-			// Flee from cursor (acts as second predator)
+			// Flee from cursor
 			const cdx = b.x - mouseX;
 			const cdy = b.y - mouseY;
-			const cdist2 = cdx * cdx + cdy * cdy;
-			const cursorR2 = CURSOR_SCARE_RADIUS * CURSOR_SCARE_RADIUS;
-
-			if (cdist2 < cursorR2 && cdist2 > 0) {
-				const cdist = Math.sqrt(cdist2);
-				const strength = CURSOR_FLEE_FORCE * (1 - cdist / CURSOR_SCARE_RADIUS);
-				b.vx += (cdx / cdist) * strength;
-				b.vy += (cdy / cdist) * strength;
+			const cd2 = cdx * cdx + cdy * cdy;
+			if (cd2 < cursorR2 && cd2 > 0) {
+				const cdist = Math.sqrt(cd2);
+				const s = CURSOR_FLEE_FORCE * (1 - cdist / CURSOR_SCARE_RADIUS);
+				b.vx += (cdx / cdist) * s;
+				b.vy += (cdy / cdist) * s;
 				currentMaxSpeed = FLEE_SPEED;
 			}
 
-			// Soft edge avoidance
 			if (b.x < EDGE_MARGIN) b.vx += EDGE_TURN;
 			if (b.x > width - EDGE_MARGIN) b.vx -= EDGE_TURN;
 			if (b.y < EDGE_MARGIN) b.vy += EDGE_TURN;
 			if (b.y > height - EDGE_MARGIN) b.vy -= EDGE_TURN;
 
-			// Clamp speed
 			const speed = Math.sqrt(b.vx * b.vx + b.vy * b.vy);
 			if (speed > currentMaxSpeed) {
 				b.vx = (b.vx / speed) * currentMaxSpeed;
@@ -260,7 +301,6 @@
 				b.vy = (b.vy / speed) * MIN_SPEED;
 			}
 
-			// Move
 			b.x += b.vx;
 			b.y += b.vy;
 		}
@@ -269,47 +309,77 @@
 	function draw() {
 		if (!ctx) return;
 
-		// Fade previous frame for trails
-		ctx.fillStyle = `rgba(250, 250, 250, ${TRAIL_ALPHA})`;
+		// Fade existing pixels toward transparent (trail lifespan)
+		ctx.globalCompositeOperation = 'destination-out';
+		ctx.globalAlpha = TRAIL_FADE;
+		ctx.fillStyle = '#000';
 		ctx.fillRect(0, 0, width, height);
+		ctx.globalCompositeOperation = 'source-over';
 
-		// Draw boids
-		for (let i = 0; i < boids.length; i++) {
-			const b = boids[i];
-			const angle = Math.atan2(b.vy, b.vx);
-
-			ctx.save();
-			ctx.translate(b.x, b.y);
-			ctx.rotate(angle);
-
+		// --- Boid trail segments (prev -> current), batched by color ---
+		ctx.lineWidth = 1.5;
+		for (let c = 0; c < NUM_COLORS; c++) {
+			ctx.globalAlpha = COLOR_BASE_ALPHA[c] * 0.6;
+			ctx.strokeStyle = COLOR_STR[c];
 			ctx.beginPath();
-			ctx.moveTo(BOID_SIZE * 2, 0);
-			ctx.lineTo(-BOID_SIZE, -BOID_SIZE);
-			ctx.lineTo(-BOID_SIZE, BOID_SIZE);
-			ctx.closePath();
 
-			ctx.fillStyle = b.color;
-			ctx.fill();
-			ctx.restore();
+			for (let i = 0; i < boids.length; i++) {
+				const b = boids[i];
+				if (b.colorIdx !== c) continue;
+				ctx.moveTo(b.px, b.py);
+				ctx.lineTo(b.x, b.y);
+			}
+
+			ctx.stroke();
 		}
 
-		// Draw predator (larger, red-tinted triangle)
-		const p = predator;
-		const pAngle = Math.atan2(p.vy, p.vx);
+		// --- Boid heads, batched by color (no trig -- direction from velocity) ---
+		for (let c = 0; c < NUM_COLORS; c++) {
+			ctx.globalAlpha = COLOR_BASE_ALPHA[c];
+			ctx.fillStyle = COLOR_STR[c];
+			ctx.beginPath();
 
-		ctx.save();
-		ctx.translate(p.x, p.y);
-		ctx.rotate(pAngle);
+			for (let i = 0; i < boids.length; i++) {
+				const b = boids[i];
+				if (b.colorIdx !== c) continue;
 
+				const inv = 1 / (Math.sqrt(b.vx * b.vx + b.vy * b.vy) + 1e-8);
+				const ux = b.vx * inv, uy = b.vy * inv;
+				const perpX = -uy, perpY = ux;
+				const s = BOID_SIZE;
+
+				ctx.moveTo(b.x + ux * s * 2, b.y + uy * s * 2);
+				ctx.lineTo(b.x - ux * s + perpX * s, b.y - uy * s + perpY * s);
+				ctx.lineTo(b.x - ux * s - perpX * s, b.y - uy * s - perpY * s);
+			}
+
+			ctx.fill();
+		}
+
+		// --- Predator trail segment ---
+		ctx.lineWidth = 2;
+		ctx.globalAlpha = 0.4;
+		ctx.strokeStyle = 'rgb(180,60,60)';
 		ctx.beginPath();
-		ctx.moveTo(PREDATOR_SIZE * 2, 0);
-		ctx.lineTo(-PREDATOR_SIZE, -PREDATOR_SIZE);
-		ctx.lineTo(-PREDATOR_SIZE, PREDATOR_SIZE);
-		ctx.closePath();
+		ctx.moveTo(predator.px, predator.py);
+		ctx.lineTo(predator.x, predator.y);
+		ctx.stroke();
 
-		ctx.fillStyle = PREDATOR_COLOR;
+		// --- Predator head ---
+		const p = predator;
+		const pInv = 1 / (Math.sqrt(p.vx * p.vx + p.vy * p.vy) + 1e-8);
+		const pux = p.vx * pInv, puy = p.vy * pInv;
+		const pperpX = -puy, pperpY = pux;
+		const sz = PREDATOR_SIZE;
+		ctx.globalAlpha = 0.7;
+		ctx.fillStyle = 'rgb(180,60,60)';
+		ctx.beginPath();
+		ctx.moveTo(p.x + pux * sz * 2, p.y + puy * sz * 2);
+		ctx.lineTo(p.x - pux * sz + pperpX * sz, p.y - puy * sz + pperpY * sz);
+		ctx.lineTo(p.x - pux * sz - pperpX * sz, p.y - puy * sz - pperpY * sz);
 		ctx.fill();
-		ctx.restore();
+
+		ctx.globalAlpha = 1;
 	}
 
 	function loop() {
@@ -324,15 +394,12 @@
 		height = window.innerHeight;
 		canvas.width = width;
 		canvas.height = height;
-
+		rebuildGrid();
 		if (boids.length === 0) {
 			initBoids();
 			initPredator();
 		}
-
-		if (ctx) {
-			ctx.clearRect(0, 0, width, height);
-		}
+		if (ctx) ctx.clearRect(0, 0, width, height);
 	}
 
 	function handlePointerMove(e: PointerEvent) {
@@ -346,18 +413,14 @@
 	}
 
 	function handleVisibilityChange() {
-		if (document.hidden) {
-			cancelAnimationFrame(rafId);
-		} else {
-			rafId = requestAnimationFrame(loop);
-		}
+		if (document.hidden) cancelAnimationFrame(rafId);
+		else rafId = requestAnimationFrame(loop);
 	}
 
 	onMount(() => {
 		ctx = canvas.getContext('2d', { desynchronized: true });
 		resize();
 		rafId = requestAnimationFrame(loop);
-
 		window.addEventListener('resize', resize);
 		window.addEventListener('pointermove', handlePointerMove);
 		window.addEventListener('pointerleave', handlePointerLeave);

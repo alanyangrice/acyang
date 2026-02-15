@@ -2,19 +2,19 @@
 	const projects = [
 		{
 			name: 'Poker MCP',
-			description: 'MCP server for poker action recommendations. Uses game theory optimal (GTO) equity calculations, player tracking, and exploit-based recommendations.',
+			description: 'MCP server that provides LLMs poker action recommendations using game theory optimal (GTO) equity calculations, player tracking, and exploit-based recommendations.',
 			url: 'https://github.com/alanyangrice/mcp-poker',
 			tags: ['MCP', 'TypeScript', 'Python', 'SQLite']
 		},
 		{
 			name: 'Checkers Reinforcement Learning',
-			description: 'A fully playable checkers game with a reinforcement learning agent trained via Proximal Policy Optimization (PPO) self-play.',
+			description: 'Fully playable checkers game with a reinforcement learning agent trained via Proximal Policy Optimization (PPO) self-play with opponent pools and alpha-zero training loop.',
 			url: 'https://github.com/alanyangrice/checkersRL',
 			tags: ['PyTorch', 'Gymnasium', 'Multiprocessing', 'Python']
 		},
 		{
 			name: '[In Progress] Realtime Crypto Market Websocket',
-			description: 'A low-latency Rust service that injests real-time crypto market data from Kraken and Coinbase WebSocket feed and normalizes it into a consistent internal schema stored in a database.',
+			description: 'Low-latency Rust service that injests real-time crypto market data from Kraken and Coinbase WebSocket and normalizes it into a consistent schema stored in a database.',
 			url: 'https://github.com/alanyangrice/crypto-websocket',
 			tags: ['Rust', 'Tokio', 'Postgres', 'Redis']
 		}
