@@ -59,4 +59,18 @@
 	nav a:hover {
 		color: var(--text);
 	}
+
+	@media (max-width: 480px) {
+		.site-name {
+			font-size: 0.95rem;
+		}
+
+		nav {
+			gap: 0.8rem;
+		}
+
+		nav a {
+			font-size: 0.78rem;
+		}
+	}
 </style>
