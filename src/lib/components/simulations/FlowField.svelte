@@ -6,15 +6,20 @@
 	const NOISE_SCALE = 0.003;
 	const TIME_SPEED = 0.0004;
 	const PARTICLE_SPEED = 1.5;
-	const PARTICLE_ALPHA = 0.15;
+	const PARTICLE_ALPHA = 0.12;
 	const CURSOR_RADIUS = 200;
 	const CURSOR_R2 = CURSOR_RADIUS * CURSOR_RADIUS;
 	const CURSOR_VORTEX = 0.6;
 	const LINE_WIDTH = 1.2;
 	const NUM_FIELDS = 3;
 
-	// --- Trail decay ---
-	const TRAIL_FADE = 0.005; // ~6-frame half-life: fast initial drop, long tail
+	// --- Trail decay (periodic to bypass 8-bit quantization floor) ---
+	// Fade once every FADE_INTERVAL frames with a big-enough step.
+	// Effective per-frame rate ≈ FADE_AMOUNT / FADE_INTERVAL ≈ 0.001
+	// Half-life ≈ ln(0.5)/ln(1-FADE_AMOUNT) * FADE_INTERVAL ≈ 600 frames (~10s)
+	const FADE_INTERVAL = 45;  // frames between fade passes
+	const FADE_AMOUNT = 0.06;  // alpha removed per pass (>0.04 beats 8-bit floor)
+	let frameCount = 0;
 
 	// Blue palette
 	const COLOR_RGB: [number, number, number][] = [
@@ -180,12 +185,16 @@
 	function draw() {
 		if (!ctx) return;
 
-		// Fade existing pixels toward transparent (trail lifespan)
-		ctx.globalCompositeOperation = 'destination-out';
-		ctx.globalAlpha = TRAIL_FADE;
-		ctx.fillStyle = '#000';
-		ctx.fillRect(0, 0, width, height);
-		ctx.globalCompositeOperation = 'source-over';
+		// Periodic fade: one big step every N frames (bypasses 8-bit quantization floor)
+		frameCount++;
+		if (frameCount >= FADE_INTERVAL) {
+			frameCount = 0;
+			ctx.globalCompositeOperation = 'destination-out';
+			ctx.globalAlpha = FADE_AMOUNT;
+			ctx.fillStyle = '#000';
+			ctx.fillRect(0, 0, width, height);
+			ctx.globalCompositeOperation = 'source-over';
+		}
 
 		// Draw only prev -> current segments, batched by color
 		ctx.lineWidth = LINE_WIDTH;
