@@ -2,7 +2,7 @@
 	const projects = [
 		{
 			name: 'Poker MCP',
-			description: 'MCP server that provides LLMs poker action recommendations using game theory optimal (GTO) equity calculations, player tracking, and exploit-based recommendations.',
+			description: 'MCP server that provides LLMs poker action storage and recommendations using game theory optimal (GTO) equity calculations, player tracking, and exploit-based recommendations.',
 			url: 'https://github.com/alanyangrice/mcp-poker',
 			tags: ['MCP', 'TypeScript', 'Python', 'SQLite']
 		},
@@ -14,9 +14,9 @@
 		},
 		{
 			name: 'Realtime Crypto Market Data Websocket',
-			description: 'Low-latency Rust service that injests real-time crypto market data from multiple venues, compute derived analytics, and persists everything to a Redis hot-state cache.',
+			description: 'Low-latency Rust service that injests real-time crypto market data from multiple venues, compute derived analytics, and persists everything to a Parquet data lake and Redis hot-state cache.',
 			url: 'https://github.com/alanyangrice/crypto-websocket',
-			tags: ['Rust', 'Tokio', 'Postgres', 'Redis']
+			tags: ['Rust', 'Tokio', 'Parquet', 'Redis']
 		}
 	];
 </script>
