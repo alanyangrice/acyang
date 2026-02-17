@@ -13,8 +13,8 @@
 			tags: ['PyTorch', 'Gymnasium', 'Multiprocessing', 'Python']
 		},
 		{
-			name: '[In Progress] Realtime Crypto Market Websocket',
-			description: 'Low-latency Rust service that injests real-time crypto market data from Kraken and Coinbase WebSocket and normalizes it into a consistent schema stored in a database.',
+			name: 'Realtime Crypto Market Data Websocket',
+			description: 'Low-latency Rust service that injests real-time crypto market data from multiple venues, compute derived analytics, and persists everything to a Redis hot-state cache.',
 			url: 'https://github.com/alanyangrice/crypto-websocket',
 			tags: ['Rust', 'Tokio', 'Postgres', 'Redis']
 		}
