@@ -21,7 +21,7 @@
 	</p>
 
 	<p>
-		I am currently interested in researching browser agents and reinforcement learning environments. Previously, I worked at 
+		I am currently interested in recursive learning agents and reinforcement learning environments. Previously, I worked at 
 		<a href="https://www.bcm.edu/research/faculty-labs/robert-waterland-lab">Waterland Lab</a> where I researched the long-term stability of human 
 		<a href="https://google.com/search?q=Correlated+Regions+of+Systemic+Interindividual+Variation">CoRSIVs</a>.
 	</p>
