@@ -1,10 +1,10 @@
 <script lang="ts">
 	const projects = [
 		{
-			name: 'Poker MCP',
-			description: 'MCP server that provides LLMs poker action storage and recommendations using game theory optimal (GTO) equity calculations, player tracking, and exploit-based recommendations.',
-			url: 'https://github.com/alanyangrice/mcp-poker',
-			tags: ['MCP', 'TypeScript', 'Python', 'SQLite']
+			name: 'Agent Router',
+			description: 'MCP-first agent coordination platform with a three-role pipeline (coder, QA, reviewer), CAS-based task state machine, dependency DAG, push-based SSE notifications, and a real-time Kanban dashboard.',
+			url: 'https://github.com/alanyangrice/agent-router',
+			tags: ['Go', 'MCP', 'Postgres', 'Next.js', 'Concurrency']
 		},
 		{
 			name: 'Checkers Reinforcement Learning',
