@@ -9,8 +9,8 @@
 		{
 			name: 'Checkers Reinforcement Learning',
 			description: 'Fully playable checkers game with four RL training pipelines: PPO self-play with curriculum learning, PPO league play against opponent pools, and two AlphaZero MCTS variants — scalar value and win/draw/loss heads.',
-			url: 'https://github.com/alanyangrice/checkersRL',
-			tags: ['PyTorch', 'Gymnasium', 'Multiprocessing', 'Python']
+			url: 'https://www.checkers-rl.com/',
+			tags: ['PyTorch', 'Python', 'CUDA', 'NumPy']
 		},
 		{
 			name: 'Realtime Crypto Market Data Websocket',
