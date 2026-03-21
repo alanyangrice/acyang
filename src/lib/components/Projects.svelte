@@ -2,15 +2,15 @@
 	const projects = [
 		{
 			name: 'Checkers Reinforcement Learning',
-			description: 'Fully playable checkers game with four RL training pipelines: PPO self-play with curriculum learning, PPO league play against opponent pools, and two AlphaZero MCTS variants — scalar value and win/draw/loss heads.',
-			url: 'https://www.checkers-rl.com/',
+			description: 'Fully playable checkers game with four RL training pipelines: PPO self-play with curriculum learning and league play against opponent pools, and two AlphaZero MCTS variants using scalar value and win/draw/loss heads.',
+			url: 'https://www.checkers-rl.com',
 			tags: ['PyTorch', 'Python', 'CUDA', 'NumPy']
 		},
 		{
-			name: 'Agent Router',
-			description: 'MCP-first agent coordination platform with a three-role pipeline (coder, QA, reviewer), CAS-based task state machine, dependency DAG, push-based SSE notifications, and a real-time Kanban dashboard.',
-			url: 'https://github.com/alanyangrice/agent-router',
-			tags: ['Go', 'MCP', 'Postgres', 'Next.js', 'Concurrency']
+			name: 'TinyGPT',
+			description: 'A GPT language model built from scratch in PyTorch using Moonshot AI\'s Attention Residuals to replace standard residual connections. Features a LLaMA-style architecture (RoPE, RMSNorm, SwiGLU, GQA) and supports zero-disk HuggingFace dataset streaming.',
+			url: 'https://github.com/alanyangrice/tiny-gpt',
+			tags: ['PyTorch', 'Python', 'LLMs', 'Transformers']
 		},
 		{
 			name: 'Realtime Crypto Market Data Websocket',
