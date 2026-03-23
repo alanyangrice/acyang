@@ -2,15 +2,13 @@
 	import { onMount, onDestroy } from 'svelte';
 
 	// --- Tuning ---
-	const NUM_PARTICLES = 1500;
+	const NUM_PARTICLES = 6000;
 	const NOISE_SCALE = 0.003;
 	const TIME_SPEED = 0.0004;
 	const PARTICLE_SPEED = 1.5;
-	const PARTICLE_ALPHA = 0.12;
-	const CURSOR_RADIUS = 200;
-	const CURSOR_R2 = CURSOR_RADIUS * CURSOR_RADIUS;
-	const CURSOR_VORTEX = 0.6;
-	const LINE_WIDTH = 1.2;
+	// Slightly lower per-stroke alpha so more overlapping particles stay readable
+	const PARTICLE_ALPHA = 0.09;
+	const LINE_WIDTH = 1;
 	const NUM_FIELDS = 3;
 
 	// --- Trail decay (periodic to bypass 8-bit quantization floor) ---
@@ -56,8 +54,6 @@
 	let particles: Particle[] = [];
 	let rafId: number;
 	let time = 0;
-	let mouseX = -1000;
-	let mouseY = -1000;
 
 	// ---- Perlin noise ----
 	const perm = new Uint8Array(512);
@@ -125,18 +121,7 @@
 			totalAngle += n * Math.PI * 4 * l.weight;
 			totalWeight += l.weight;
 		}
-		let angle = totalAngle / totalWeight;
-
-		// Cursor vortex (only compute sqrt if inside radius)
-		const dx = x - mouseX, dy = y - mouseY;
-		const d2 = dx * dx + dy * dy;
-		if (d2 < CURSOR_R2 && d2 > 0) {
-			const dist = Math.sqrt(d2);
-			const vortexAngle = Math.atan2(dx, -dy);
-			const influence = (1 - dist / CURSOR_RADIUS) * CURSOR_VORTEX;
-			angle = angle * (1 - influence) + vortexAngle * influence;
-		}
-		return angle;
+		return totalAngle / totalWeight;
 	}
 
 	function spawnParticle(): Particle {
@@ -239,8 +224,6 @@
 		if (ctx) ctx.clearRect(0, 0, width, height);
 	}
 
-	function handlePointerMove(e: PointerEvent) { mouseX = e.clientX; mouseY = e.clientY; }
-	function handlePointerLeave() { mouseX = -1000; mouseY = -1000; }
 	function handleVisibilityChange() {
 		if (document.hidden) cancelAnimationFrame(rafId);
 		else rafId = requestAnimationFrame(loop);
@@ -251,8 +234,6 @@
 		resize();
 		rafId = requestAnimationFrame(loop);
 		window.addEventListener('resize', resize);
-		window.addEventListener('pointermove', handlePointerMove);
-		window.addEventListener('pointerleave', handlePointerLeave);
 		document.addEventListener('visibilitychange', handleVisibilityChange);
 	});
 
@@ -260,8 +241,6 @@
 		if (typeof window === 'undefined') return;
 		cancelAnimationFrame(rafId);
 		window.removeEventListener('resize', resize);
-		window.removeEventListener('pointermove', handlePointerMove);
-		window.removeEventListener('pointerleave', handlePointerLeave);
 		document.removeEventListener('visibilitychange', handleVisibilityChange);
 	});
 </script>
