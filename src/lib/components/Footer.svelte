@@ -9,7 +9,7 @@
 		margin-top: 4rem;
 		padding: 2rem 0;
 		border-top: 1px solid var(--border);
-		background: rgba(250, 250, 250, 0.55);
+		background: color-mix(in srgb, var(--bg) 55%, transparent);
 		backdrop-filter: blur(2px);
 		-webkit-backdrop-filter: blur(2px);
 		-webkit-mask-image:

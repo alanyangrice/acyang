@@ -20,7 +20,7 @@
 
 <style>
 	header {
-		background: rgba(250, 250, 250, 0.55);
+		background: color-mix(in srgb, var(--bg) 55%, transparent);
 		backdrop-filter: blur(1px);
 		-webkit-backdrop-filter: blur(1px);
 		border-bottom: 1px solid var(--border);

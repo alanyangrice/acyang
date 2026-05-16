@@ -1,9 +1,9 @@
 <script lang="ts">
 	const experiences = [
 		{
-			role: 'Software Engineer Intern',
-			company: 'Capital One',
-			url: 'https://www.capitalone.com',
+			role: 'Software Development Engineer Intern',
+			company: 'AWS',
+			url: 'https://aws.amazon.com/redshift/',
 			period: 'Jun 2026 – Aug 2026',
 			description: 'Incoming Summer 2026.',
 			tags: []
@@ -32,7 +32,7 @@
 			url: 'https://www.bcm.edu/research/faculty-labs/robert-waterland-lab',
 			period: 'May 2024 – May 2025',
 			description:
-				'Automated whole-genome bisulfite sequencing processing at 2TB+ scale. Built an LLM-powered literature triage pipeline to classify 2,000 papers. Co-authored a manuscript accepted to Nucleic Acids Research and first-authored an abstract presented at the 13th DOHaD World Congress.',
+				'Automated whole-genome bisulfite sequencing processing at 2TB+ scale. Built an LLM-powered literature triage pipeline to classify 2,000 papers. Co-authored a manuscript accepted to Nucleic Acids Research.',
 			tags: ['Python', 'R', 'Bash', 'Linux', 'Bioinformatics']
 		},
 	];

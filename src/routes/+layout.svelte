@@ -18,8 +18,6 @@
 	<title>Alan Yang</title>
 </svelte:head>
 
-<FlowField />
-
 <div class="page-wrapper">
 	<div id="top"></div>
 	<Header />
