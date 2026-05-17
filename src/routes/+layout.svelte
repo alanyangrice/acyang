@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '../app.css';
+	import { afterNavigate } from '$app/navigation';
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import FlowField from '$lib/components/simulations/FlowField.svelte';
@@ -9,13 +10,20 @@
 
 	let { children } = $props();
 
+	afterNavigate(({ to }) => {
+		const hash = to?.url.hash;
+		if (!hash) return;
+		requestAnimationFrame(() => {
+			document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth' });
+		});
+	});
+
 	// const backgrounds = ['flowfield', 'boids', 'gameoflife'] as const;
 	// const selected = backgrounds[(Math.random() * backgrounds.length) | 0];
 </script>
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
-	<title>Alan Yang</title>
 </svelte:head>
 
 <div class="page-wrapper">

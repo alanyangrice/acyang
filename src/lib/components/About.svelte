@@ -32,10 +32,6 @@
 </section>
 
 <style>
-	section {
-		padding-top: 4rem;
-	}
-
 	.intro-header {
 		display: flex;
 		align-items: center;

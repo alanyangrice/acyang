@@ -6,8 +6,8 @@
 
 <style>
 	footer {
-		margin-top: 4rem;
-		padding: 2rem 0;
+		margin-top: 2rem;
+		padding: 1.25rem 0;
 		border-top: 1px solid var(--border);
 		background: color-mix(in srgb, var(--bg) 55%, transparent);
 		backdrop-filter: blur(2px);

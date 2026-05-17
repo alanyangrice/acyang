@@ -16,8 +16,8 @@
 <style>
 	.links {
 		display: flex;
-		gap: 2.5rem;
-		margin-top: 1.5rem;
+		gap: 2rem;
+		margin-top: 1rem;
 	}
 
 	.links a {

@@ -1,15 +1,14 @@
 <script lang="ts">
 	const navItems = [
-		{ label: 'About', href: '#about' },
-		{ label: 'Experience', href: '#experience' },
-		{ label: 'Projects', href: '#projects' },
-		{ label: 'Contact', href: '#contact' }
+		{ label: 'About', href: '/' },
+		{ label: 'Experience', href: '/experience' },
+		{ label: 'Projects', href: '/projects' }
 	];
 </script>
 
 <header>
 	<div class="container header-inner">
-		<a class="site-name" href="#top">Alan Yang</a>
+		<a class="site-name" href="/">Alan Yang</a>
 		<nav>
 			{#each navItems as item}
 				<a href={item.href}>{item.label}</a>
