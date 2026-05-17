@@ -12,18 +12,20 @@
 
 	<p>
 		I am a junior at <a href="https://www.rice.edu">Rice University</a> studying Computer Science and Statistics.
-		Currently, I am working at <a href="https://recruitu.com">RecruitU</a> as a Software Engineer working on visualizing human experiences using graph networks.
+		This summer, I am joining <a href="https://aws.amazon.com/redshift/">AWS Redshift</a> as a Software Development Engineer Intern.
 	</p>
 
 	<p>
-		Previously, I co-founded <a href="https://breakin.ai">BreakIn</a>, a platform that automates the outreaching process for finance and investment banking recruiting.
-		We scaled to over six figures in annual revenue and 2,000 users.
+		Previously, I worked at <a href="https://recruitu.com">RecruitU</a> as a Software Engineer, where I built migration tooling for their API and search infrastructure.
+		Before that, I co-founded <a href="https://breakin.ai">BreakIn</a>, a platform that automates outreach for finance recruiting.
+		We scaled to six figures in annual revenue and 2,000 users before being acquired by RecruitU.
 	</p>
 
 	<p>
-		I am currently interested in recursive learning agents, reinforcement learning environments, and high performance systems. Previously, I worked at 
-		<a href="https://www.bcm.edu/research/faculty-labs/robert-waterland-lab">Waterland Lab</a> where I researched the long-term stability of human 
-		<a href="https://google.com/search?q=Correlated+Regions+of+Systemic+Interindividual+Variation">CoRSIVs</a>.
+		I am interested in reinforcement learning, recursive learning agents, and high performance systems.
+		I also worked at <a href="https://www.bcm.edu/research/faculty-labs/robert-waterland-lab">Waterland Lab</a> where I researched the long-term stability of human
+		<a href="https://google.com/search?q=Correlated+Regions+of+Systemic+Interindividual+Variation">CoRSIVs</a>,
+		co-authoring a paper accepted at Nucleic Acids Research.
 	</p>
 
 	<p>
@@ -55,7 +57,6 @@
 		display: block;
 	}
 
-	/* Stack on small screens */
 	@media (max-width: 560px) {
 		.intro-header {
 			flex-direction: column-reverse;

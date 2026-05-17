@@ -18,7 +18,7 @@ export const experiences: Experience[] = [
 		role: 'Software Development Engineer Intern',
 		company: 'AWS — Redshift',
 		url: 'https://aws.amazon.com/redshift/',
-		period: 'Jun 2026 - Aug 2026',
+		period: 'Jun 2026 — Aug 2026',
 		start: month(2026, 5),
 		end: month(2026, 7),
 		bullets: ['Incoming Summer 2026.'],
@@ -29,7 +29,7 @@ export const experiences: Experience[] = [
 		role: 'Software Engineer Intern',
 		company: 'RecruitU',
 		url: 'https://recruitu.com',
-		period: 'Jan 2026 - May 2026',
+		period: 'Jan 2026 — May 2026',
 		start: month(2026, 0),
 		end: month(2026, 4),
 		bullets: [
@@ -44,7 +44,7 @@ export const experiences: Experience[] = [
 		role: 'Co-Founder',
 		company: 'BreakIn (acquired)',
 		url: 'https://breakin.ai',
-		period: 'Apr 2025 - Dec 2025',
+		period: 'Apr 2025 — Dec 2025',
 		start: month(2025, 3),
 		end: month(2025, 11),
 		bullets: [
@@ -60,7 +60,7 @@ export const experiences: Experience[] = [
 		role: 'Research Intern',
 		company: 'Baylor College of Medicine',
 		url: 'https://www.bcm.edu/research/faculty-labs/robert-waterland-lab',
-		period: 'May 2024 - May 2025',
+		period: 'May 2024 — May 2025',
 		start: month(2024, 4),
 		end: month(2025, 4),
 		bullets: [
@@ -76,7 +76,7 @@ export const experiences: Experience[] = [
 		role: 'Full Stack Engineer',
 		company: 'RiceApps',
 		url: 'https://riceapps.org',
-		period: 'Oct 2023 - Apr 2024',
+		period: 'Oct 2023 — Apr 2024',
 		start: month(2023, 9),
 		end: month(2024, 3),
 		bullets: [
