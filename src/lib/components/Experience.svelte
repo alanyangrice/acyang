@@ -84,7 +84,13 @@
 						<span>@</span>
 						<a href={selected.url} target="_blank" rel="noopener noreferrer">{selected.company}</a>
 					</h3>
-					<p class="dates">{selected.period}</p>
+					<p class="dates">
+						<span>{selected.period}</span>
+						{#if selected.location}
+							<span class="date-separator">·</span>
+							<span>{selected.location}</span>
+						{/if}
+					</p>
 
 					<ul class="description">
 						{#each selected.bullets as bullet}
@@ -233,6 +239,9 @@
 	}
 
 	.dates {
+		display: inline-grid;
+		grid-template-columns: auto 1fr auto;
+		min-width: min(100%, 280px);
 		margin-top: 0.25rem;
 		margin-bottom: 0;
 		color: var(--text-tertiary);
@@ -240,6 +249,10 @@
 		font-size: 12px;
 		line-height: 1.4;
 		white-space: nowrap;
+	}
+
+	.date-separator {
+		text-align: center;
 	}
 
 	.description {
@@ -253,22 +266,6 @@
 
 	.description li + li {
 		margin-top: 0.3rem;
-	}
-
-	.tags {
-		display: flex;
-		gap: 0.4rem;
-		flex-wrap: wrap;
-		margin-top: 0.7rem;
-	}
-
-	.tag {
-		padding: 0.12rem 0.35rem;
-		border-radius: 3px;
-		background: var(--bg-secondary);
-		color: var(--text-muted);
-		font-size: 11px;
-		line-height: 1.35;
 	}
 
 	@keyframes detail-enter {

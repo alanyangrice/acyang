@@ -6,6 +6,7 @@ export type Experience = {
 	company: string;
 	url: string;
 	period: string;
+	location?: string;
 	start: number;
 	end: number;
 	bullets: string[];
@@ -19,6 +20,7 @@ export const experiences: Experience[] = [
 		company: 'AWS — Redshift',
 		url: 'https://aws.amazon.com/redshift/',
 		period: 'Jun 2026 — Aug 2026',
+		location: 'Redmond, WA',
 		start: month(2026, 5),
 		end: month(2026, 7),
 		bullets: ['Incoming Summer 2026.'],
@@ -30,6 +32,7 @@ export const experiences: Experience[] = [
 		company: 'RecruitU',
 		url: 'https://recruitu.com',
 		period: 'Jan 2026 — May 2026',
+		location: 'New York, NY',
 		start: month(2026, 0),
 		end: month(2026, 4),
 		bullets: [
@@ -61,6 +64,7 @@ export const experiences: Experience[] = [
 		company: 'Baylor College of Medicine',
 		url: 'https://www.bcm.edu/research/faculty-labs/robert-waterland-lab',
 		period: 'May 2024 — May 2025',
+		location: 'Houston, TX',
 		start: month(2024, 4),
 		end: month(2025, 4),
 		bullets: [
@@ -77,6 +81,7 @@ export const experiences: Experience[] = [
 		company: 'RiceApps',
 		url: 'https://riceapps.org',
 		period: 'Oct 2023 — Apr 2024',
+		location: 'Houston, TX',
 		start: month(2023, 9),
 		end: month(2024, 3),
 		bullets: [

@@ -57,22 +57,8 @@
 
 	.project-desc {
 		margin-top: 0.25rem;
-		margin-bottom: 0.5rem;
+		margin-bottom: 0;
 		color: var(--text-muted);
 		font-size: 0.95rem;
-	}
-
-	.tags {
-		display: flex;
-		gap: 0.5rem;
-		flex-wrap: wrap;
-	}
-
-	.tag {
-		font-size: 0.75rem;
-		padding: 0.15rem 0.5rem;
-		border-radius: 4px;
-		background-color: var(--border);
-		color: var(--text-muted);
 	}
 </style>

@@ -6,7 +6,7 @@
 
 <style>
 	footer {
-		margin-top: 2rem;
+		margin-top: auto;
 		padding: 1.25rem 0;
 		border-top: 1px solid var(--border);
 		background: color-mix(in srgb, var(--bg) 55%, transparent);
