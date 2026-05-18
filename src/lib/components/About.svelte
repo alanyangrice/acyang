@@ -24,7 +24,7 @@
 	<p>
 		I am interested in reinforcement learning, recursive learning agents, and high performance systems.
 		I also worked at <a href="https://www.bcm.edu/research/faculty-labs/robert-waterland-lab">Waterland Lab</a> where I researched the long-term stability of human
-		<a href="https://google.com/search?q=Correlated+Regions+of+Systemic+Interindividual+Variation">CoRSIVs</a>,
+		<a href="https://pubmed.ncbi.nlm.nih.gov/36631879">CoRSIVs</a>,
 		co-authoring a paper accepted at Nucleic Acids Research.
 	</p>
 
