@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
 	import checkersGameplay from '$lib/assets/checkersrl-gameplay.gif';
+	import tinyGptResults from '$lib/assets/tinygpt-results.png';
 
 	const projects = [
 		{
@@ -21,6 +22,7 @@
 			description: 'A GPT language model built from scratch in PyTorch using Moonshot AI\'s Attention Residuals to replace standard residual connections. Features a LLaMA-style architecture (RoPE, RMSNorm, SwiGLU, GQA) and supports zero-disk HuggingFace dataset streaming.',
 			tags: ['PyTorch', 'Python', 'LLMs', 'Transformers'],
 			mediaLabel: 'Screenshot of training curves',
+			media: tinyGptResults,
 			links: [{ label: 'Code', url: 'https://github.com/alanyangrice/tiny-gpt', icon: 'github' }]
 		},
 		{
