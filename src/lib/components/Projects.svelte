@@ -24,6 +24,14 @@
 			links: [{ label: 'Code', url: 'https://github.com/alanyangrice/tiny-gpt', icon: 'github' }]
 		},
 		{
+			name: 'Missile Defense World Model',
+			pitch: 'VAE + MDN-RNN · Dream Rollouts',
+			description: 'A Gymnasium missile defense simulator to train a Ha and Schmidhuber-style World Model: full-resolution rollout collection, VAE frame encoding, MDN-RNN latent dynamics with reward prediction, and a CMA-ES controller planned for imagined rollouts.',
+			tags: ['PyTorch', 'Python', 'Gymnasium', 'Pygame'],
+			mediaLabel: 'Radar environment or dream rollout screenshot',
+			links: [{ label: 'Code', url: 'https://github.com/alanyangrice/irondome-wm', icon: 'github' }]
+		},
+		{
 			name: 'Realtime Crypto Market Data Websocket',
 			pitch: 'Low-latency Rust · multi-venue ingestion',
 			description: 'Low-latency Rust service that ingests real-time crypto market data from multiple venues, computes derived analytics, and persists everything to a Parquet data lake and Redis hot-state cache.',

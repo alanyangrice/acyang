@@ -282,17 +282,36 @@
 
 	@media (max-width: 620px) {
 		.experience-timeline {
-			grid-template-columns: 170px minmax(0, 1fr);
-			gap: 0.75rem;
+			display: block;
+			height: auto !important;
 		}
 
 		.detail-panel {
-			left: calc(170px + 0.75rem);
+			position: static;
+			margin-top: 1.25rem;
+			transition: none;
+		}
+
+		.detail-content {
+			padding-right: 0;
 		}
 
 		.entry-label {
-			width: 58px;
+			width: calc(100% - 104px);
+			max-width: 190px;
 			font-size: 12px;
+		}
+
+		h3 a {
+			white-space: normal;
+		}
+
+		.dates {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0 0.4rem;
+			min-width: 0;
+			white-space: normal;
 		}
 	}
 </style>
