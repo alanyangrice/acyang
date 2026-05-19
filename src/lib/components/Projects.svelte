@@ -35,7 +35,7 @@
 		},
 		{
 			name: 'Realtime Crypto Market Data Websocket',
-			pitch: 'Low-latency Rust · multi-venue ingestion',
+			pitch: 'Low-latency Rust · Multi-Venue Ingestion',
 			description: 'Low-latency Rust service that ingests real-time crypto market data from multiple venues, computes derived analytics, and persists everything to a Parquet data lake and Redis hot-state cache.',
 			tags: ['Rust', 'Tokio', 'Parquet', 'Redis'],
 			mediaLabel: 'Architecture diagram or terminal screenshot',

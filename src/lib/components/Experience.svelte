@@ -282,28 +282,51 @@
 
 	@media (max-width: 620px) {
 		.experience-timeline {
-			display: block;
-			height: auto !important;
+			grid-template-columns: 116px minmax(0, 1fr);
+			gap: 0.625rem;
 		}
 
 		.detail-panel {
-			position: static;
-			margin-top: 1.25rem;
-			transition: none;
+			left: calc(116px + 0.625rem);
 		}
 
 		.detail-content {
 			padding-right: 0;
 		}
 
+		.axis-line {
+			left: 22px !important;
+		}
+
+		.year-tick {
+			left: 19px !important;
+			width: 6px;
+		}
+
+		.year-label {
+			left: 0 !important;
+			font-size: 10px;
+		}
+
+		.timeline-bar {
+			width: 9px;
+			transform: translateX(-24px);
+		}
+
 		.entry-label {
-			width: calc(100% - 104px);
-			max-width: 190px;
-			font-size: 12px;
+			left: 70px !important;
+			width: 44px;
+			font-size: 10.5px;
+			line-height: 1.15;
 		}
 
 		h3 a {
 			white-space: normal;
+		}
+
+		h3 {
+			font-size: 14px;
+			line-height: 1.3;
 		}
 
 		.dates {
@@ -311,7 +334,22 @@
 			flex-wrap: wrap;
 			gap: 0 0.4rem;
 			min-width: 0;
+			font-size: 10.5px;
 			white-space: normal;
+		}
+
+		.description {
+			padding-left: 0.85rem;
+			font-size: 12px;
+			line-height: 1.45;
+		}
+
+		.tags {
+			gap: 0.3rem;
+		}
+
+		.tag {
+			font-size: 10px;
 		}
 	}
 </style>
