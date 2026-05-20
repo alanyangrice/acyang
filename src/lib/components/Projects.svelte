@@ -2,6 +2,7 @@
 	import { fly } from 'svelte/transition';
 	import checkersGameplay from '$lib/assets/checkersrl-gameplay.gif';
 	import tinyGptResults from '$lib/assets/tinygpt-results.png';
+	import cryptoWebsocketArch from '$lib/assets/md-ingest-arch.png'
 
 	const projects = [
 		{
@@ -39,6 +40,7 @@
 			description: 'Low-latency Rust service that ingests real-time crypto market data from multiple venues, computes derived analytics, and persists everything to a Parquet data lake and Redis hot-state cache.',
 			tags: ['Rust', 'Tokio', 'Parquet', 'Redis'],
 			mediaLabel: 'Architecture diagram or terminal screenshot',
+			media: cryptoWebsocketArch,
 			links: [
 				{ label: 'Code', url: 'https://github.com/alanyangrice/crypto-websocket', icon: 'github' }
 			]
