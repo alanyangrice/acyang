@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+@import './tokens.css';
 
 /* ===== Reset ===== */
 *,
@@ -9,57 +10,62 @@
 	padding: 0;
 }
 
-/* ===== Design Tokens ===== */
-:root {
-	--accent: #4a6fa5;
-	--text: #1a1a1a;
-	--text-muted: #6b7280;
-	--text-tertiary: #8a919f;
-	--bg: #f9f9f7;
-	--bg-secondary: #f0f0ed;
-	--border: #e5e7eb;
-	--max-width: 680px;
-	--font: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-		Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
-	--font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
-}
-
 /* ===== Base ===== */
 html {
 	scroll-behavior: smooth;
+	overflow-x: clip;
 }
 
 body {
-	font-family: var(--font);
-	font-size: 16px;
+	font-family: var(--font-body);
+	font-size: var(--text-md);
 	line-height: 1.7;
-	color: var(--text);
-	background-color: var(--bg);
+	color: var(--color-ink);
+	background-color: var(--color-paper);
+	background-image:
+		linear-gradient(90deg, color-mix(in srgb, var(--color-rule) 38%, transparent) 1px, transparent 1px),
+		linear-gradient(color-mix(in srgb, var(--color-rule) 28%, transparent) 1px, transparent 1px);
+	background-position: center top;
+	background-size: 4.75rem 4.75rem;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	/* Allow Game of Life canvas to show through */
 	min-height: 100vh;
+	overflow-x: clip;
 }
 
 /* ===== Typography ===== */
 h1 {
-	font-size: 2rem;
-	font-weight: 700;
-	line-height: 1.2;
-	letter-spacing: -0.02em;
+	font-family: var(--font-display);
+	font-size: var(--text-2xl);
+	font-weight: 600;
+	line-height: 1.15;
+	letter-spacing: -0.025em;
+	overflow-wrap: anywhere;
+	min-width: 0;
 }
 
 h2 {
-	font-size: 11px;
+	display: flex;
+	align-items: center;
+	gap: var(--space-xs);
+	font-size: var(--text-xs);
 	font-weight: 500;
 	text-transform: uppercase;
 	letter-spacing: 0.12em;
-	color: var(--text-tertiary);
-	margin-bottom: 0.75rem;
+	color: var(--color-ink-3);
+	margin-bottom: var(--space-xs);
+}
+
+h2::before {
+	content: '::';
+	color: var(--color-ink);
+	font-family: var(--font-mono);
+	letter-spacing: 0;
 }
 
 p {
-	margin-bottom: 1rem;
+	margin-bottom: var(--space-sm);
+	max-width: 65ch;
 }
 
 p:last-child {
@@ -68,15 +74,23 @@ p:last-child {
 
 /* ===== Links ===== */
 a {
-	color: var(--text);
+	color: var(--color-ink);
 	text-decoration: underline;
-	text-decoration-color: var(--accent);
-	text-underline-offset: 2px;
-	transition: color 0.15s ease;
+	text-decoration-color: var(--color-rule);
+	text-underline-offset: 3px;
+	transition: color var(--dur-short) var(--ease-out),
+		text-decoration-color var(--dur-short) var(--ease-out);
 }
 
 a:hover {
-	color: var(--accent);
+	color: var(--color-ink);
+	text-decoration-color: var(--color-ink-2);
+}
+
+a:focus-visible,
+button:focus-visible {
+	outline: 2px solid var(--color-focus);
+	outline-offset: 2px;
 }
 
 /* ===== Utilities ===== */
@@ -85,44 +99,84 @@ a:hover {
 	max-width: var(--max-width);
 	margin-left: auto;
 	margin-right: auto;
-	padding-left: 1.5rem;
-	padding-right: 1.5rem;
+	padding-left: var(--space-md);
+	padding-right: var(--space-md);
+}
+
+.ascii-rule {
+	color: var(--color-ink-3);
+	font-family: var(--font-mono);
+	font-size: var(--text-xs);
+	line-height: 1.2;
+	letter-spacing: 0.02em;
+	overflow: hidden;
+	white-space: nowrap;
 }
 
 /* ===== Tags ===== */
 .tags {
 	display: flex;
-	gap: 0.4rem;
+	gap: var(--space-3xs);
 	flex-wrap: wrap;
-	margin-top: 0.7rem;
+	margin-top: var(--space-xs);
 }
 
 .tag {
-	padding: 0.12rem 0.35rem;
-	border-radius: 3px;
-	background: var(--bg-secondary);
-	color: var(--text-muted);
-	font-size: 11px;
+	padding: 3px 9px;
+	border-radius: var(--radius-sm);
+	background: var(--color-paper-2);
+	color: var(--color-ink-3);
+	font-size: var(--text-xs);
 	line-height: 1.35;
 }
 
 /* ===== Main spacing ===== */
 main.container {
-	padding-top: 0.5rem;
-	padding-bottom: 1.25rem;
-	margin-top: 0.5rem;
-	margin-bottom: 0.75rem;
+	padding-top: var(--space-2xs);
+	padding-bottom: var(--space-xl);
+	margin-top: var(--space-2xs);
+	margin-bottom: var(--space-xs);
 }
 
 /* ===== Section spacing ===== */
 section {
-	padding-top: 1.75rem;
-	padding-bottom: 1.75rem;
+	padding-top: var(--space-2xl);
+	padding-bottom: var(--space-2xl);
+}
+
+section:first-child {
+	padding-top: var(--space-xl);
 }
 
 /* ===== Horizontal rule ===== */
 hr {
 	border: none;
-	border-top: 1px solid var(--border);
-	margin: 1rem 0;
+	border-top: var(--rule);
+	margin: var(--space-md) 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}
+
+@media (max-width: 480px) {
+	.container {
+		padding-left: var(--space-sm);
+		padding-right: var(--space-sm);
+	}
+
+	section {
+		padding-top: var(--space-lg);
+		padding-bottom: var(--space-lg);
+	}
 }

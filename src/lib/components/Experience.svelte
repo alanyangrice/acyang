@@ -79,6 +79,7 @@
 		<aside class="detail-panel" style:top={`${panelTop}px`}>
 			{#key selected.id}
 				<div class="detail-content" bind:clientHeight={panelHeight}>
+					<span class="detail-kicker">[{selected.id}] selected</span>
 					<h3>
 						{selected.role}
 						<span>@</span>
@@ -112,11 +113,24 @@
 </section>
 
 <style>
+	#experience {
+		padding-bottom: 0;
+	}
+
 	.experience-timeline {
 		display: grid;
 		grid-template-columns: 280px minmax(0, 1fr);
-		gap: 1rem;
+		gap: var(--space-md);
 		position: relative;
+	}
+
+	.timeline-note {
+		margin-top: calc(var(--space-xs) * -1);
+		margin-bottom: var(--space-md);
+		color: var(--color-ink-3);
+		font-family: var(--font-mono);
+		font-size: var(--text-xs);
+		line-height: 1.4;
 	}
 
 	.timeline-axis {
@@ -126,7 +140,7 @@
 	.axis-line {
 		position: absolute;
 		width: 1px;
-		background: var(--border);
+		background: var(--color-rule);
 	}
 
 	.year-marker {
@@ -142,15 +156,15 @@
 		top: 50%;
 		width: 8px;
 		height: 1px;
-		background: var(--border);
+		background: var(--color-rule);
 	}
 
 	.year-label {
 		position: absolute;
 		top: 50%;
-		color: var(--text-tertiary);
+		color: var(--color-ink-3);
 		font-family: var(--font-mono);
-		font-size: 12px;
+		font-size: var(--text-xs);
 		line-height: 1;
 		transform: translateY(-50%);
 	}
@@ -160,19 +174,19 @@
 		width: 11px;
 		border: 0;
 		border-radius: 4px;
-		background: color-mix(in srgb, var(--text) 18%, transparent);
+		background: color-mix(in srgb, var(--color-ink) 18%, transparent);
 		cursor: pointer;
 		transition:
-			background 0.16s ease,
-			transform 0.16s ease;
+			background var(--dur-short) var(--ease-out),
+			transform var(--dur-short) var(--ease-out);
 	}
 
 	.timeline-bar:hover {
-		background: color-mix(in srgb, var(--text) 32%, transparent);
+		background: color-mix(in srgb, var(--color-ink) 32%, transparent);
 	}
 
 	.timeline-bar.active {
-		background: color-mix(in srgb, var(--text) 50%, transparent);
+		background: var(--color-ink);
 	}
 
 	.entry-label {
@@ -181,21 +195,21 @@
 		padding: 0;
 		border: 0;
 		background: transparent;
-		color: var(--text-muted);
+		color: var(--color-ink-2);
 		font: inherit;
-		font-size: 13px;
+		font-size: var(--text-sm);
 		line-height: 1.25;
 		text-align: left;
 		cursor: pointer;
 		opacity: 0.68;
 		transform: translateY(-50%);
 		transition:
-			color 0.16s ease,
-			opacity 0.16s ease;
+			color var(--dur-short) var(--ease-out),
+			opacity var(--dur-short) var(--ease-out);
 	}
 
 	.entry-label.active {
-		color: var(--text);
+		color: var(--color-ink);
 		font-weight: 500;
 		opacity: 1;
 	}
@@ -207,33 +221,45 @@
 
 	.detail-panel {
 		position: absolute;
-		left: calc(280px + 1rem);
+		left: calc(280px + var(--space-md));
 		right: 0;
-		transition: top 0.24s ease;
+		transition: top var(--dur-med) var(--ease-out);
 	}
 
 	.detail-content {
-		padding-right: 0.25rem;
+		padding: var(--space-sm);
+		border: var(--rule);
+		border-radius: var(--radius-md);
+		background: color-mix(in srgb, var(--color-paper) 82%, transparent);
 		animation: detail-enter 0.2s ease both;
+	}
+
+	.detail-kicker {
+		display: block;
+		margin-bottom: var(--space-2xs);
+		color: var(--color-ink-3);
+		font-family: var(--font-mono);
+		font-size: var(--text-xs);
+		line-height: 1.2;
 	}
 
 	h3 {
 		margin: 0;
-		color: var(--text);
+		color: var(--color-ink);
 		font-size: 16px;
 		font-weight: 500;
 		line-height: 1.35;
 	}
 
 	h3 span {
-		color: var(--text-muted);
+		color: var(--color-ink-2);
 		font-weight: 400;
 	}
 
 	h3 a {
-		color: var(--text);
+		color: var(--color-ink);
 		text-decoration: underline;
-		text-decoration-color: var(--accent);
+		text-decoration-color: var(--color-rule);
 		text-underline-offset: 2px;
 		white-space: nowrap;
 	}
@@ -244,9 +270,9 @@
 		min-width: min(100%, 280px);
 		margin-top: 0.25rem;
 		margin-bottom: 0;
-		color: var(--text-tertiary);
+		color: var(--color-ink-3);
 		font-family: var(--font-mono);
-		font-size: 12px;
+		font-size: var(--text-xs);
 		line-height: 1.4;
 		white-space: nowrap;
 	}
@@ -259,7 +285,7 @@
 		margin-top: 0.6rem;
 		margin-bottom: 0;
 		padding-left: 1rem;
-		color: var(--text-muted);
+		color: var(--color-ink-2);
 		font-size: 13.5px;
 		line-height: 1.55;
 	}
@@ -283,11 +309,11 @@
 	@media (max-width: 620px) {
 		.experience-timeline {
 			grid-template-columns: 116px minmax(0, 1fr);
-			gap: 0.625rem;
+			gap: var(--space-xs);
 		}
 
 		.detail-panel {
-			left: calc(116px + 0.625rem);
+			left: calc(116px + var(--space-xs));
 		}
 
 		.detail-content {

@@ -3,9 +3,6 @@
 	import { afterNavigate } from '$app/navigation';
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
-	import FlowField from '$lib/components/simulations/FlowField.svelte';
-	import Boids from '$lib/components/simulations/Boids.svelte';
-	import GameOfLife from '$lib/components/simulations/GameOfLife.svelte';
 	import favicon from '$lib/assets/ASCII_DNA_Helix.png';
 
 	let { children } = $props();
@@ -17,9 +14,6 @@
 			document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth' });
 		});
 	});
-
-	// const backgrounds = ['flowfield', 'boids', 'gameoflife'] as const;
-	// const selected = backgrounds[(Math.random() * backgrounds.length) | 0];
 </script>
 
 <svelte:head>
@@ -42,5 +36,18 @@
 		display: flex;
 		flex-direction: column;
 		min-height: 100vh;
+		background: linear-gradient(
+			180deg,
+			color-mix(in srgb, var(--color-paper) 82%, transparent),
+			var(--color-paper) 34rem
+		);
+	}
+
+	@media (max-width: 760px) {
+		.page-wrapper::before {
+			top: 6rem;
+			right: -7rem;
+			opacity: 0.04;
+		}
 	}
 </style>

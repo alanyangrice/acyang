@@ -2,11 +2,12 @@
 	import { fly } from 'svelte/transition';
 	import checkersGameplay from '$lib/assets/checkersrl-gameplay.gif';
 	import tinyGptResults from '$lib/assets/tinygpt-results.png';
-	import cryptoWebsocketArch from '$lib/assets/md-ingest-arch.png'
+	import cryptoWebsocketArch from '$lib/assets/md-ingest-arch.png';
 
 	const projects = [
 		{
 			name: 'Checkers Reinforcement Learning',
+			index: '01',
 			pitch: 'MCTS & PPO self-play · League Training',
 			description: 'Fully playable checkers game with four RL training pipelines: PPO self-play with curriculum learning and league play against opponent pools, and two AlphaZero MCTS variants using scalar value and win/draw/loss heads.',
 			tags: ['PyTorch', 'Python', 'CUDA', 'NumPy'],
@@ -19,6 +20,7 @@
 		},
 		{
 			name: 'Tiny GPT',
+			index: '02',
 			pitch: 'LLaMA architecture · Attention Residuals',
 			description: 'A GPT language model built from scratch in PyTorch using Moonshot AI\'s Attention Residuals to replace standard residual connections. Features a LLaMA-style architecture (RoPE, RMSNorm, SwiGLU, GQA) and supports zero-disk HuggingFace dataset streaming.',
 			tags: ['PyTorch', 'Python', 'LLMs', 'Transformers'],
@@ -28,6 +30,7 @@
 		},
 		{
 			name: 'Missile Defense World Model',
+			index: '03',
 			pitch: 'VAE + MDN-RNN · Dream Rollouts',
 			description: 'A Gymnasium missile defense simulator to train a Ha and Schmidhuber-style World Model: full-resolution rollout collection, VAE frame encoding, MDN-RNN latent dynamics with reward prediction, and a CMA-ES controller planned for imagined rollouts.',
 			tags: ['PyTorch', 'Python', 'Gymnasium', 'Pygame'],
@@ -36,6 +39,7 @@
 		},
 		{
 			name: 'Realtime Crypto Market Data Websocket',
+			index: '04',
 			pitch: 'Low-latency Rust · Multi-Venue Ingestion',
 			description: 'Low-latency Rust service that ingests real-time crypto market data from multiple venues, computes derived analytics, and persists everything to a Parquet data lake and Redis hot-state cache.',
 			tags: ['Rust', 'Tokio', 'Parquet', 'Redis'],
@@ -64,11 +68,41 @@
 </script>
 
 <section id="projects">
-	<h2>PROJECTS</h2>
+	<h2>Projects</h2>
 
 	<div class="projects-carousel" aria-live="polite">
+		<div class="carousel-nav" aria-label="Project carousel controls">
+			<div class="dots" role="tablist" aria-label="Choose project">
+				{#each projects as project, index}
+					<button
+						type="button"
+						class:active={selectedIndex === index}
+						aria-label={`Show ${project.name}`}
+						aria-selected={selectedIndex === index}
+						role="tab"
+						onclick={() => selectProject(index)}
+					></button>
+				{/each}
+			</div>
+
+			<div class="arrow-controls">
+				<span class="counter">{selectedIndex + 1} / {projects.length}</span>
+				<button type="button" class="arrow-button" aria-label="Previous project" onclick={previousProject}>
+					<svg viewBox="0 0 24 24" aria-hidden="true">
+						<path d="M15.5 5.75 9.25 12l6.25 6.25-1.06 1.06L7.13 12l7.31-7.31 1.06 1.06Z" />
+					</svg>
+				</button>
+				<button type="button" class="arrow-button" aria-label="Next project" onclick={nextProject}>
+					<svg viewBox="0 0 24 24" aria-hidden="true">
+						<path d="m8.5 18.25 6.25-6.25L8.5 5.75l1.06-1.06L16.87 12l-7.31 7.31-1.06-1.06Z" />
+					</svg>
+				</button>
+			</div>
+		</div>
+
 		{#key selected.name}
 			<article class="project-card" in:fly={{ y: 6, duration: 250 }}>
+
 				<div class="project-media" aria-label={selected.mediaLabel}>
 					{#if selected.media}
 						<img src={selected.media} alt={selected.mediaLabel} />
@@ -116,50 +150,41 @@
 				</div>
 			</article>
 		{/key}
-
-		<div class="carousel-nav" aria-label="Project carousel controls">
-			<div class="dots" role="tablist" aria-label="Choose project">
-				{#each projects as project, index}
-					<button
-						type="button"
-						class:active={selectedIndex === index}
-						aria-label={`Show ${project.name}`}
-						aria-selected={selectedIndex === index}
-						role="tab"
-						onclick={() => selectProject(index)}
-					></button>
-				{/each}
-			</div>
-
-			<div class="arrow-controls">
-				<span class="counter">{selectedIndex + 1} / {projects.length}</span>
-				<button type="button" class="arrow-button" aria-label="Previous project" onclick={previousProject}>
-					<svg viewBox="0 0 24 24" aria-hidden="true">
-						<path d="M15.5 5.75 9.25 12l6.25 6.25-1.06 1.06L7.13 12l7.31-7.31 1.06 1.06Z" />
-					</svg>
-				</button>
-				<button type="button" class="arrow-button" aria-label="Next project" onclick={nextProject}>
-					<svg viewBox="0 0 24 24" aria-hidden="true">
-						<path d="m8.5 18.25 6.25-6.25L8.5 5.75l1.06-1.06L16.87 12l-7.31 7.31-1.06-1.06Z" />
-					</svg>
-				</button>
-			</div>
-		</div>
 	</div>
 </section>
 
 <style>
+	#projects {
+		padding-bottom: 0;
+	}
+
 	.projects-carousel {
 		display: flex;
 		flex-direction: column;
-		gap: 1.25rem;
+		gap: var(--space-md);
 	}
 
 	.project-card {
-		padding: 1.25rem;
-		border: 0.5px solid var(--border);
-		border-radius: 12px;
-		background: var(--bg);
+		padding: var(--space-md);
+		border: var(--rule);
+		border-radius: var(--radius-md);
+		background: var(--color-paper);
+	}
+
+	.project-meta {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr);
+		gap: var(--space-xs);
+		margin-bottom: var(--space-sm);
+		color: var(--color-ink-3);
+		font-family: var(--font-mono);
+		font-size: var(--text-xs);
+		line-height: 1.2;
+		white-space: nowrap;
+	}
+
+	.project-meta span:last-child {
+		overflow: hidden;
 	}
 
 	.project-media {
@@ -167,13 +192,13 @@
 		aspect-ratio: 16 / 9;
 		align-items: center;
 		justify-content: center;
-		margin-bottom: 1.25rem;
-		border: 0.5px solid var(--border);
-		border-radius: 8px;
-		background: var(--bg-secondary);
-		color: var(--text-tertiary);
+		margin-bottom: var(--space-md);
+		border: var(--rule);
+		border-radius: var(--radius-sm);
+		background: var(--color-paper-2);
+		color: var(--color-ink-3);
 		font-family: var(--font-mono);
-		font-size: 12px;
+		font-size: var(--text-xs);
 		text-align: center;
 		overflow: hidden;
 	}
@@ -181,76 +206,76 @@
 	.project-media img {
 		width: 100%;
 		height: 100%;
-		object-fit: cover;
+		object-fit: contain;
 		display: block;
 	}
 
 	.project-title {
-		color: var(--text);
-		font-size: 17px;
+		color: var(--color-ink);
+		font-size: var(--text-lg);
 		font-weight: 500;
 		line-height: 1.35;
-		text-decoration-color: var(--border);
+		text-decoration-color: var(--color-rule);
 		text-underline-offset: 3px;
 	}
 
 	.project-title:hover {
-		color: var(--text);
-		text-decoration-color: var(--text-muted);
+		color: var(--color-ink);
+		text-decoration-color: var(--color-ink-2);
 	}
 
 	.project-pitch {
 		margin-top: 2px;
-		margin-bottom: 10px;
-		color: var(--text-tertiary);
+		margin-bottom: var(--space-xs);
+		color: var(--color-ink-3);
 		font-family: var(--font-mono);
-		font-size: 13px;
+		font-size: var(--text-xs);
 		line-height: 1.5;
 	}
 
 	.project-desc {
-		margin-bottom: 14px;
-		color: var(--text-muted);
-		font-size: 14px;
+		margin-bottom: var(--space-sm);
+		color: var(--color-ink-2);
+		font-size: var(--text-sm);
 		line-height: 1.6;
 	}
 
 	.project-tags {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 5px;
-		margin-bottom: 14px;
+		gap: var(--space-3xs);
+		margin-bottom: var(--space-sm);
 	}
 
 	.project-tags span {
 		padding: 3px 9px;
-		border-radius: 3px;
-		background: var(--bg-secondary);
-		color: var(--text-tertiary);
-		font-size: 11px;
+		border-radius: var(--radius-xs);
+		background: var(--color-paper-2);
+		color: var(--color-ink-3);
+		font-size: var(--text-xs);
 		line-height: 1.35;
 	}
 
 	.project-links {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 1rem;
-		padding-top: 14px;
-		border-top: 0.5px solid var(--border);
+		gap: var(--space-sm);
+		padding-top: var(--space-sm);
+		border-top: var(--rule);
 	}
 
 	.project-links a {
 		display: inline-flex;
 		align-items: center;
 		gap: 6px;
-		color: var(--text-muted);
-		font-size: 13px;
+		color: var(--color-ink-2);
+		font-size: var(--text-sm);
 		line-height: 1;
 		text-decoration: none;
 	}
 
 	.project-links a:hover {
-		color: var(--text);
+		color: var(--color-ink);
 	}
 
 	.project-links svg,
@@ -264,12 +289,12 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: 1rem;
+		gap: var(--space-sm);
 	}
 
 	.dots {
 		display: flex;
-		gap: 8px;
+		gap: var(--space-xs);
 	}
 
 	.dots button {
@@ -277,7 +302,7 @@
 		height: 6px;
 		border: 0;
 		border-radius: 999px;
-		background: var(--text);
+		background: var(--color-ink);
 		cursor: pointer;
 		opacity: 0.15;
 	}
@@ -289,14 +314,14 @@
 	.arrow-controls {
 		display: flex;
 		align-items: center;
-		gap: 8px;
+		gap: var(--space-xs);
 	}
 
 	.counter {
 		margin-right: 2px;
-		color: var(--text-tertiary);
+		color: var(--color-ink-3);
 		font-family: var(--font-mono);
-		font-size: 12px;
+		font-size: var(--text-xs);
 		line-height: 1;
 	}
 
@@ -306,23 +331,33 @@
 		height: 32px;
 		align-items: center;
 		justify-content: center;
-		border: 0.5px solid var(--border);
+		border: var(--rule);
 		border-radius: 999px;
-		background: var(--bg);
-		color: var(--text);
+		background: var(--color-paper);
+		color: var(--color-ink);
 		cursor: pointer;
 		transition:
-			background-color 0.15s ease,
-			border-color 0.15s ease;
+			background-color var(--dur-short) var(--ease-out),
+			border-color var(--dur-short) var(--ease-out);
 	}
 
 	.arrow-button:hover {
-		border-color: var(--text-tertiary);
-		background: var(--bg-secondary);
+		border-color: var(--color-ink-3);
+		background: var(--color-paper-2);
 	}
 
 	.arrow-button svg {
 		width: 16px;
 		height: 16px;
+	}
+
+	@media (max-width: 480px) {
+		.project-card {
+			padding: var(--space-sm);
+		}
+
+		.carousel-nav {
+			align-items: flex-start;
+		}
 	}
 </style>
