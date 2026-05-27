@@ -38,8 +38,17 @@
 			links: [{ label: 'Code', url: 'https://github.com/alanyangrice/irondome-wm', icon: 'github' }]
 		},
 		{
-			name: 'Realtime Crypto Market Data Websocket',
+			name: 'Novel Translator',
 			index: '04',
+			pitch: 'Voice-faithful JP-EN · Parallel Corpus',
+			description: 'A literary translation pipeline that generates English translations from Japanese source text using a parallel JP-EN corpus to replicate the voice and style of an existing human translator.',
+			tags: ['Python', 'LLM Evals', 'Context Engineering', 'Style Transfer'],
+			mediaLabel: 'Translation pipeline or evaluation screenshot',
+			links: [{ label: 'Code', url: 'https://github.com/alanyangrice/ln-translator', icon: 'github' }]
+		},
+		{
+			name: 'Realtime Crypto Market Data Websocket',
+			index: '05',
 			pitch: 'Low-latency Rust · Multi-Venue Ingestion',
 			description: 'Low-latency Rust service that ingests real-time crypto market data from multiple venues, computes derived analytics, and persists everything to a Parquet data lake and Redis hot-state cache.',
 			tags: ['Rust', 'Tokio', 'Parquet', 'Redis'],
@@ -102,7 +111,6 @@
 
 		{#key selected.name}
 			<article class="project-card" in:fly={{ y: 6, duration: 250 }}>
-
 				<div class="project-media" aria-label={selected.mediaLabel}>
 					{#if selected.media}
 						<img src={selected.media} alt={selected.mediaLabel} />
@@ -169,22 +177,6 @@
 		border: var(--rule);
 		border-radius: var(--radius-md);
 		background: var(--color-paper);
-	}
-
-	.project-meta {
-		display: grid;
-		grid-template-columns: auto minmax(0, 1fr);
-		gap: var(--space-xs);
-		margin-bottom: var(--space-sm);
-		color: var(--color-ink-3);
-		font-family: var(--font-mono);
-		font-size: var(--text-xs);
-		line-height: 1.2;
-		white-space: nowrap;
-	}
-
-	.project-meta span:last-child {
-		overflow: hidden;
 	}
 
 	.project-media {
