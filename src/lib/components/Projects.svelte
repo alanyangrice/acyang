@@ -42,7 +42,7 @@
 			index: '04',
 			pitch: 'Voice-faithful JP-EN · Parallel Corpus',
 			description: 'A literary translation pipeline that generates English translations from Japanese source text using a parallel JP-EN corpus to replicate the voice and style of an existing human translator.',
-			tags: ['Python', 'LLM Evals', 'Context Engineering', 'Style Transfer'],
+			tags: ['Python', 'LLM Evals', 'RAG', 'Context Engineering'],
 			mediaLabel: 'Translation pipeline or evaluation screenshot',
 			links: [{ label: 'Code', url: 'https://github.com/alanyangrice/ln-translator', icon: 'github' }]
 		},
