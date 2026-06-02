@@ -13,7 +13,7 @@
 	<div class="about-body">
 		<p>
 			I am a junior at <a href="https://www.rice.edu">Rice University</a> studying Computer Science and Statistics.
-			This summer, I am joining <a href="https://aws.amazon.com/redshift/">AWS Redshift</a> as a Software Development Engineer Intern.
+			This summer, I am joining <a href="https://aws.amazon.com/redshift/">AWS Redshift</a> as a Software Development Engineer Intern working on agentic AI workflows.
 		</p>
 
 		<p>
