@@ -3,6 +3,8 @@
 	import checkersGameplay from '$lib/assets/checkersrl-gameplay.gif';
 	import tinyGptResults from '$lib/assets/tinygpt-results.png';
 	import cryptoWebsocketArch from '$lib/assets/md-ingest-arch.png';
+	import worldModelPOV from '$lib/assets/world_model_pov.gif'
+	import translatorPipeline from '$lib/assets/translator-pipeline.png'
 
 	const projects = [
 		{
@@ -35,6 +37,7 @@
 			description: 'A Gymnasium missile defense simulator to train a Ha and Schmidhuber-style World Model: full-resolution rollout collection, VAE frame encoding, MDN-RNN latent dynamics with reward prediction, and a CMA-ES controller planned for imagined rollouts.',
 			tags: ['PyTorch', 'Python', 'Gymnasium', 'Pygame'],
 			mediaLabel: 'Radar environment or dream rollout screenshot',
+			media: worldModelPOV,
 			links: [{ label: 'Code', url: 'https://github.com/alanyangrice/irondome-wm', icon: 'github' }]
 		},
 		{
@@ -44,6 +47,7 @@
 			description: 'A literary translation pipeline that generates English translations from Japanese source text using a parallel JP-EN corpus to replicate the voice and style of an existing human translator.',
 			tags: ['Python', 'LLM Evals', 'RAG', 'Context Engineering'],
 			mediaLabel: 'Translation pipeline or evaluation screenshot',
+			media: translatorPipeline,
 			links: [{ label: 'Code', url: 'https://github.com/alanyangrice/ln-translator', icon: 'github' }]
 		},
 		{
